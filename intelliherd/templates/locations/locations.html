@@ -1,0 +1,25 @@
+{% extends "site/base.html" %}
+{% import "site/base.html" as layout with context %}
+{% block navbar %}
+{{super()}}
+{%- endblock navbar %}
+{% block sidebar %}
+{{super()}}
+{%- endblock sidebar %}
+{% block content_header -%}
+<h2>
+    {{farm.name}}
+    <small> Locations Dashboard</small>
+</h2>
+<ol class="breadcrumb">
+    <li><a href={{url_for('account.accountDashboard')}}>Home</a></li>
+    <li><a href={{url_for('farms.allFarms')}}> Farms</a></li>
+    <li><a href={{url_for('farms.farmDashboard', farm_id=farm.farm_id)}}>{{farm.name}}</a></li>
+    <li><a href="#"> Locations</a></li>
+</ol>
+{%- endblock content_header %}
+{% block content -%}
+<div class="box">
+    {{ table }}
+</div>
+{%- endblock content %}

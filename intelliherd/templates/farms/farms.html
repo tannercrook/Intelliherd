@@ -1,0 +1,30 @@
+{% extends "site/base.html" %}
+{% import "site/base.html" as layout with context %}
+{% block navbar %}
+{{super()}}
+{%- endblock navbar %}
+{% block sidebar %}
+{{super()}}
+{%- endblock sidebar %}
+{% block content_header -%}
+<h1>
+    Farms
+    <small> All Farms</small>
+</h1>
+<ol class="breadcrumb">
+    <li><a href={{url_for('account.accountDashboard')}}>Home</a></li>
+    <li>Farms</a></li>
+</ol>
+{%- endblock content_header %}
+{% block content -%}
+<div class="row">
+    {% for farm in userFarms %}
+    <div class="col-lg-4 m-2">
+        {{widgets.boxButton(iconClass="fas fa-seedling", textClass="text-white", text=farm.name, link=url_for('farms.farmDashboard', farm_id=farm.farm_id), classes="bg-success")}}
+    </div>
+    {% endfor %}
+
+    
+
+</div>
+{%- endblock content %}

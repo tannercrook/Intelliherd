@@ -1,0 +1,175 @@
+{% extends "public/base.html" %}
+{%- block head %}
+{{ super() }}
+{%- endblock head %}
+
+{%- block body %}
+
+<body>
+    <!-- Header and Nav -->
+    {%- block header %}
+    {{ super() }}
+    {%- endblock header %}
+
+    <!-- Content -->
+    {%- block content %}
+
+    <div class="container mt-4 pt-4">
+
+
+        <div class="row mt-3 mb-3">
+            <div class="col">
+                <hr>
+            </div>
+            <div class="col-auto">
+                <h1>Basic Plans</h1>
+            </div>
+            <div class="col">
+                <hr>
+            </div>
+        </div>
+
+        <div class="card-deck mb-3 text-center">
+            {% for sub in basicSubs %}
+
+
+
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{sub.name}}</h4>
+                </div>
+                <div class="card-body">
+                    <h1 class="card-title pricing-card-title">{{sub.price_monthly}} <small class="text-muted">/
+                            mo</small></h1>
+                    <h1 class="card-title pricing-card-title">{{sub.price_annual}} <small class="text-muted">/
+                            year</small></h1>
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>{{sub.max_users}} users</li>
+                        <li>{{sub.max_farms}} Farms</li>
+                        <li>{{sub.max_animals}} Animals</li>
+                    </ul>
+                    <a href="{{url_for('public.signUp', subscription_id=sub.subscription_id)}}"
+                        class="btn btn-lg btn-block btn-outline-primary">Sign Up</a>
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+
+        <div class="row mt-3 mb-3">
+            <div class="col">
+                <hr>
+            </div>
+            <div class="col-auto">
+                <h1>Business and Enterprise</h1>
+            </div>
+            <div class="col">
+                <hr>
+            </div>
+        </div>
+
+
+
+
+        <div class="card-deck mb-3 text-center">
+
+            {% for sub in businessSubs %}
+
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{sub.name}}</h4>
+                </div>
+                <div class="card-body">
+                    <h1 class="card-title pricing-card-title">{{sub.price_monthly}} <small class="text-muted">/
+                            mo</small></h1>
+                    <h1 class="card-title pricing-card-title">{{sub.price_annual}} <small class="text-muted">/
+                            year</small></h1>
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>{{sub.max_users}} users</li>
+                        <li>{{sub.max_farms}} Farms</li>
+                        <li>{{sub.max_animals}} Animals</li>
+                    </ul>
+                    <a href="{{url_for('public.signUp', subscription_id=sub.subscription_id)}}"
+                        class="btn btn-lg btn-block btn-outline-primary">Sign Up</a>
+                </div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <div class="card-deck mb-3 text-center">
+
+            {% for sub in enterpriseSubs %}
+
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{sub.name}}</h4>
+                </div>
+                <div class="card-body">
+                    <h1 class="card-title pricing-card-title">{{sub.price_monthly}} <small class="text-muted">/
+                            mo</small></h1>
+                    <h1 class="card-title pricing-card-title">{{sub.price_annual}} <small class="text-muted">/
+                            year</small></h1>
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>{{sub.max_users}} users</li>
+                        <li>{{sub.max_farms}} Farms</li>
+                        <li>{{sub.max_animals}} Animals</li>
+                    </ul>
+                    <a href="{{url_for('public.signUp', subscription_id=sub.subscription_id)}}"
+                        class="btn btn-lg btn-block btn-outline-primary">Sign Up</a>
+                </div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+
+
+
+        <div class="row mt-3 mb-3">
+            <div class="col">
+                <hr>
+            </div>
+            <div class="col-auto">
+                <h1>Giving Back</h1>
+            </div>
+            <div class="col">
+                <hr>
+            </div>
+        </div>
+
+        {% for sub in givingSubs %}
+        <div class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">{{sub.name}}</h4>
+            </div>
+            <div class="card-body">
+                <h1 class="card-title pricing-card-title">{{sub.price_monthly}} <small class="text-muted">/
+                        mo</small></h1>
+                <h1 class="card-title pricing-card-title">{{sub.price_annual}} <small class="text-muted">/
+                        year</small></h1>
+                <ul class="list-unstyled mt-3 mb-4">
+                    <li>{{sub.max_users}} users</li>
+                    <li>{{sub.max_farms}} Farms</li>
+                    <li>{{sub.max_animals}} Animals</li>
+                </ul>
+                <a href="{{url_for('public.signUp', subscription_id=sub.subscription_id)}}"
+                    class="btn btn-lg btn-block btn-outline-primary">Contact Us</a>
+            </div>
+        </div>
+        {% endfor %}
+
+
+    </div>
+
+    {%- endblock content %}
+
+    <!-- Footer -->
+    {%- block footer %}
+    {{ super() }}
+    {%- endblock footer %}
+</body>
+{%- endblock body %}

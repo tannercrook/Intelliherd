@@ -1,0 +1,136 @@
+{% extends "site/base.html" %}
+{% import "site/base.html" as layout with context %}
+{% block navbar %}
+{{super()}}
+{%- endblock navbar %}
+{% block sidebar %}
+{{super()}}
+{%- endblock sidebar %}
+{% block content_header -%}
+<h2>
+    {{farm.name}}
+    <small> Vaccine Wizard</small>
+</h2>
+<ol class="breadcrumb">
+    <li><a href={{url_for('account.accountDashboard')}}> Home</a></li>
+    <li><a href={{url_for('farms.allFarms')}}> Farms</a></li>
+    <li><a href={{url_for('farms.farmDashboard', farm_id=farm.farm_id)}}>{{farm.name}}</a></li>
+    <li><a href={{url_for('animals.animalsDashboard', farm_id=farm.farm_id)}}>Animal Dash</a></li>
+    <li><a href="#"> Vaccine Wizard</a></li>
+</ol>
+{%- endblock content_header %}
+{% block content -%}
+<div class="container-fluid">
+
+    <script>
+        var app = angular.module('vaccineWizard', [], function ($interpolateProvider) {
+            $interpolateProvider.startSymbol('[[');
+            $interpolateProvider.endSymbol(']]');
+        });
+        app.controller("wzrdCtrl", function ($scope, $http) {
+            $scope.vaccines = {{ vaccines | safe }};
+        $scope.animals = {{ animals | safe }};
+        $scope.searchResults = [];
+        $scope.vaccinesApplied = [];
+        $scope.recordedDoses = [];
+
+        $scope.search = function () {
+            // Make sure at least one character is typed
+            if ($scope.animalSearch.length > 0) {
+                // Wipe out old records
+                $scope.searchResults = []
+                for (i = 0; i < $scope.animals.length; i++) {
+                    if ($scope.animals[i].number.includes($scope.animalSearch)) {
+                        $scope.searchResults.push($scope.animals[i]);
+                    } else if ($scope.animals[i].name.toLowerCase().includes($scope.animalSearch.toLowerCase())) {
+                        console.log('hit')
+                        $scope.searchResults.push($scope.animals[i]);
+                    }
+                }
+            }
+        }
+
+        $scope.checkVaccineTick = function (vaccine) {
+            if (vaccine.isChecked) {
+                $scope.vaccinesApplied.push(vaccine);
+            } else {
+                for (i = 0; i < $scope.vaccinesApplied.length; i++) {
+                    if ($scope.vaccinesApplied[i].vaccine_id = vaccine.vaccine_id) {
+                        $scope.vaccinesApplied.splice(i, 1);
+                    }
+                }
+            }
+        }
+
+
+        $scope.recordVaccineDose = function (animal) {
+            for (i = 0; i < $scope.vaccinesApplied.length; i++) {
+                console.log("Record for " + animal.animal_id + " vaccine " + $scope.vaccinesApplied[i].vaccine_id);
+                $http.get('/animals/vaccine-wizard/record/' + animal.animal_id + '/' + $scope.vaccinesApplied[i].vaccine_id).then(function (response) {
+                    // First function handles success
+                    $scope.content = response.data;
+                    // Add the record to the list of recorded ones
+                    $scope.recordedDoses.push({'animal_number':response.data.animal_number,'animal_name':response.data.animal_name,'vaccine_name':response.data.vaccine_name, 'status':response.data.status});
+                }, function (response) {
+                    // Second function handles error
+                    $scope.content = "Something went wrong";
+                });
+            }
+        }
+
+        }); 
+    </script>
+
+    <div ng-app="vaccineWizard" ng-controller="wzrdCtrl">
+        <div class="row">
+            <div class="col-md-4">
+                <table class="table border border-striped bg-white">
+                    <tr>
+                        <th>Vaccine Name</th>
+                        <th>Select</th>
+                    </tr>
+                    <tr ng-repeat="x in vaccines">
+                        <td>[[x.name]]</td>
+                        <td><input type="checkbox" ng-model="x.isChecked" ng-change="checkVaccineTick(x)"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-8">
+                <input ng-model="animalSearch" ng-keyup="search()" placeholder="Animal Search">
+                <table class="table border border-striped bg-white">
+                    <tr>
+                        <th>Number</th>
+                        <th>Name</th>
+                        <th>Record</th>
+                    </tr>
+                    <tr ng-repeat="animal in searchResults">
+                        <td>[[animal.number]]</td>
+                        <td>[[animal.name]]</td>
+                        <td><button class="btn btn-success" ng-click="recordVaccineDose(animal)">Record</button></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+                <h3>Recorded Doses</h3>
+                <table class="table border border-striped bg-white">
+                    <tr>
+                        <th>Animal Number</th>
+                        <th>Animal Name</th>
+                        <th>Vaccine</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr ng-repeat="dose in recordedDoses">
+                        <td>[[dose.animal_number]]</td>
+                        <td>[[dose.animal_name]]</td>
+                        <td>[[dose.vaccine_name]]</td>
+                        <td>[[dose.status]]</td>
+                    </tr>
+                </table>
+        </div>
+
+    </div>
+
+</div>
+
+{%- endblock content %}

@@ -1,0 +1,24 @@
+{% macro animalViewMenu(selectedItemID="demographics") %}
+<nav class="navbar navbar-dark navbar-expand-sm bg-dark">
+    <ul class="nav navbar-nav">
+        <li id="demographics" class="nav-item"><a class="nav-link" href="{{url_for('animals.viewAnimal', farm_id=farm.farm_id, animal_id=animal.animal_id)}}">Demographics</a></li>
+        <li id="pens" class="nav-item"><a class="nav-link" href="{{url_for('animals.viewAnimalPenMemberships', farm_id=farm.farm_id, animal_id=animal.animal_id)}}">Pens</a></li>
+        <li id="groups" class="nav-item"><a class="nav-link" href="#">Groups</a></li>
+        <li id="vaccinations" class="nav-item"><a class="nav-link" href="{{url_for('animals.viewAnimalVaccines', farm_id=farm.farm_id, animal_id=animal.animal_id)}}">Vaccinations</a></li>
+        <li id="health" class="nav-item"><a class="nav-link" href="#">Health</a></li>
+    </ul>
+</nav>
+<script>
+    $(document).ready( function () {
+        document.getElementById('{{selectedItemID}}').className = "active";
+    });
+</script>
+{% endmacro %}
+
+
+
+
+
+  {% macro crap(selectedItemID="demographics") %}
+
+{% endmacro %}

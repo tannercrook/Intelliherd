@@ -1,0 +1,103 @@
+{% extends "site/base.html" %}
+{% import "site/base.html" as layout with context %}
+{% block navbar %}
+{{super()}}
+{%- endblock navbar %}
+{% block sidebar %}
+{{super()}}
+{%- endblock sidebar %}
+{% block content_header -%}
+<h2>
+    {{farm.name}}
+    <small> Animals Dashboard</small>
+</h2>
+<ol class="breadcrumb">
+    <li><a href={{url_for('account.accountDashboard')}}>Home</a></li>
+    <li><a href={{url_for('farms.allFarms')}}> Farms</a></li>
+    <li><a href={{url_for('farms.farmDashboard', farm_id=farm.farm_id)}}>
+            {{farm.name}}</a></li>
+    <li><a href="#"> Animals</a></li>
+</ol>
+{%- endblock content_header %}
+{% block content -%}
+<div class="row">
+    <div class="col-md-4">
+        <div class="container p-1 border rounded">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="container p-1 border rounded">
+            <canvas id="statusChart"></canvas>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <p>TODO: Stat Boxes (raw number)</p>
+    </div>
+
+
+</div>
+<div class="row mt-4">
+    <div class="col-lg-4">
+        {{widgets.boxButton(iconClass="fas fa-list", textClass="text-white", text='View Animals', link=url_for('animals.viewFarmAnimals', farm_id=farm.farm_id), classes="bg-success")}}
+    </div>
+    <div class="col-lg-4">
+        {{widgets.boxButton(iconClass="fas fa-plus-square", textClass="text-white", text='Add Animal', link=url_for('animals.addAnimal', farm_id=farm.farm_id), classes="bg-success")}}
+    </div>
+    <div class="col-lg-4">
+        {{widgets.boxButton(iconClass="fas fa-syringe", textClass="text-white", text='Vaccine Wizard', link=url_for('animals.vaccineWizard', farm_id=farm.farm_id), classes="bg-success")}}
+        </div>
+</div>
+<script>
+    var malecount = {{ maleCount }};
+    var femalecount = {{ femaleCount }};
+    var ctx = document.getElementById('myChart');
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Male', 'Female'],
+            datasets: [{
+                label: 'Gender',
+                data: [malecount, femalecount],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 99, 132, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {}
+    });
+
+    var ctx = document.getElementById('statusChart');
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: {{ statusLabels| safe }},
+    datasets: [{
+        label: 'Gender',
+        data: {{ statusValues| safe }},
+        backgroundColor: [
+        'rgba(77, 148, 255, 0.2)',
+        'rgba(245, 204, 102, 0.2)',
+        'rgba(255, 105, 255, 0.2)',
+        'rgba(0, 204, 153, 0.2)'
+    ],
+        borderColor: [
+        'rgba(77, 148, 255, 1)',
+        'rgba(245, 204, 102, 1)',
+        'rgba(255, 105, 255, 1)',
+        'rgba(0, 204, 153, 1)'
+    ],
+        borderWidth: 1
+            }]
+        },
+    options: {}
+    });
+
+</script>
+{%- endblock content %}

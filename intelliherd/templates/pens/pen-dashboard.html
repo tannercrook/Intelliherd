@@ -1,0 +1,37 @@
+{% extends "site/base.html" %}
+{% import "site/base.html" as layout with context %}
+{% block navbar %}
+{{super()}}
+{%- endblock navbar %}
+{% block sidebar %}
+{{super()}}
+{%- endblock sidebar %}
+{% block content_header -%}
+<h2>
+    {{farm.name}}
+    <small> Pens Dashboard</small>
+</h2>
+<ol class="breadcrumb">
+    <li><a href={{url_for('account.accountDashboard')}}>Home</a></li>
+    <li><a href={{url_for('farms.allFarms')}}> Farms</a></li>
+    <li><a href={{url_for('farms.farmDashboard', farm_id=farm.farm_id)}}>{{farm.name}}</a></li>
+    <li><a href="#"> Pens</a></li>
+</ol>
+{%- endblock content_header %}
+{% block content -%}
+<div class="container-fluid">
+    <!-- Toolbar -->
+    <div class="row">
+        <a class="btn btn-primary mr-3" href={{ url_for('farms.createPen', farm_id=farm.farm_id) }}>Add Pen</a>
+    </div>
+    <hr>
+
+    <!-- Pen Table -->
+    {{ table }}
+</div>
+<script>
+    $(document).ready(function () {
+        $('#penTable').DataTable();
+    });
+</script>
+{%- endblock content %}

@@ -1,0 +1,56 @@
+{% extends "public/base.html" %}
+{%- block head %}
+{{ super() }}
+{%- endblock head %}
+
+{%- block body %}
+
+<body>
+    <!-- Header and Nav -->
+    {%- block header %}
+    {{ super() }}
+    {%- endblock header %}
+
+    <!-- Content -->
+    {%- block content %}
+    <div class="jumbotron">
+        <h1 class="display-4"><strong>Step 3: </strong>Create your organization</h1>
+    </div>
+    <div class="container">
+        <form class="form border rounded p-2" id="user-form" method="POST">
+            {{form.hidden_tag()}}
+            <div class="form-row">
+                <p class="lead">Give your organization a name.</p>
+                <div class="col-md-4">
+                    {{form.name(class="form-control", placeholder="Organization Name")}}
+                </div>
+            </div>
+            <br>
+            <div class="form-row">
+                <div class="col-md-4">
+                    <button class="btn btn-lg btn-outline-primary" type="submit">Submit</button>
+                </div>
+            </div>
+            <div class="text-danger">
+                <ul>
+                {% for message in form.errors %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                {% with messages = get_flashed_messages() %}
+                    {% for message in messages %}
+                        <li>{{message}}</li>
+                    {% endfor %}
+                    </ul>
+                {% endwith %}
+            </div>
+        </form>
+    </div>
+
+    {%- endblock content %}
+
+    <!-- Footer -->
+    {%- block footer %}
+    {{ super() }}
+    {%- endblock footer %}
+</body>
+{%- endblock body %}

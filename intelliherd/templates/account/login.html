@@ -1,0 +1,37 @@
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" type="text/css">
+<!-- Custom CSS -->
+<link href="{{url_for('static',filename='css/custom.css')}}" rel="stylesheet" type="text/css">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<body class="bg">
+    <div class="container h-100">
+        <div class="row h-100 justify-content-center align-items-center">
+            <div class="card">
+                <img class="img img-fluid m-3" src="{{url_for('static',filename='img/logo-black.png')}}" alt="logo"
+                    style="max-width: 375px; max-height: 112px;">
+                <article class="card-body">
+                    <h4 class="card-title mb-4 mt-1">Sign in</h4>
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            {{ form.email(class="form-control", placeholder="Email") }}
+                        </div> <!-- form-group// -->
+                        <div class="form-group">
+                            {{ form.password(class="form-control", placeholder="Password") }}
+                        </div> <!-- form-group// -->
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block"> Login </button>
+                        </div> <!-- form-group// -->
+                    </form>
+                    <span class="d-flex justify-content-around">
+                        <a class="btn btn-info" href="#">Forgot?</a>
+                        <a href="{{url_for('public.plans')}}" class="btn btn-primary">Sign up</a>
+                    </span>
+                </article>
+            </div> <!-- card.// -->
+        </div>
+    </div>
+</body>
+
+</html>

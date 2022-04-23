@@ -1,0 +1,76 @@
+{% extends "adminlte/base.html" %}
+{% import "adminlte/layout.html" as layout with context %}
+{% import "adminlte/widgets.html" as widgets with context %}
+{% block navbar %}
+{{super()}}
+{%- endblock navbar %}
+{% block sidebar %}
+{{ super() }}
+{%- endblock sidebar %}
+{% block content_header -%}
+<h1>
+    {{org.name}}
+    <small> Org Dashboard</small>
+</h1>
+<ol class="breadcrumb">
+    <li><a href={{url_for('account.accountDashboard')}}><i class="fa fa-dashboard"></i> Home</a></li>
+    <li><a href="#"><i class="fa fa-dashboard active"></i> {{org.name}}</a></li>
+</ol>
+{%- endblock content_header %}
+{% block content -%}
+<div class="row">
+    {% if sub != None %}
+    <div class="col-md-4">
+        
+        {{
+            widgets.orgSub_box(
+                bgcolor="bg-aqua",
+                subName=sub.name,
+                expireDate=orgSub.end_date,
+                renews=orgSub.auto_recurring,
+                footerlink="#"
+            )
+        }}
+        
+    </div>
+    
+    <div class="col-md-4">
+        {{
+            widgets.small_box(
+                bgcolor="bg-green",
+                header=farmCount|string+" of "+sub.max_farms|string,
+                body="Organazation Farms",
+                iconclass="fas fa-seedling",
+                footerText="Manage Farms",
+                footerlink=url_for('farms.allFarms')
+            )
+        }}
+    </div>
+    
+    <div class="col-md-4">
+        {{
+            widgets.info_box(
+                bgcolor="bg-blue",
+                header="Animal Quota",
+                body=activeAnimals|string+'/'+sub.max_animals|string,
+                iconclass="fas fa-horse-head",
+                footerlink="#"
+            )
+        }}
+    </div>
+    {% else %}
+        <div class="col-md-3">
+                {{
+                    widgets.small_box(
+                        bgcolor="bg-red",
+                        header="Uh Oh!",
+                        body="You don't have an active plan.",
+                        iconclass="fas fa-exclamation-circle",
+                        footerText="Purchase a Plan",
+                        footerlink=url_for('farms.allFarms')
+                    )
+                }}
+        </div>
+    {% endif %}
+</div>
+{%- endblock content %}

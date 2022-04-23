@@ -1,0 +1,200 @@
+{% extends "public/base.html" %}
+{%- block head %}
+    {{ super() }}
+{%- endblock head %}
+
+{%- block body %}
+<body>
+    <!-- Header and Nav -->
+    {%- block header %}
+        {{ super() }}
+    {%- endblock header %}
+
+    <!-- Content -->
+    {%- block content %}
+
+    <div class="carousel-inner w-100">
+            <div class="carousel-item active w-100"><img class="d-block w-100 img-fluid" style="width: 100%;"
+                    src="https://intelliherd.com/wp-content/uploads/2019/07/profileCows.jpg" alt="First slide" />
+                <p> </p>
+                <div class="carousel-caption d-md-block bg-dark">
+                    <h1>Modern Digital Herd Management</h1>
+                    <p>Manage your herd like never before with digital tools that work as hard as you do.</p>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid mt-3 pt-3 text-center">
+            <div class="row">
+                <div class="container-fluid">
+                    <h1 class="d-md-inline-flex text-dark"><strong>Built by Farmers. For Farmers.</strong></h1>
+                </div>
+                <p>
+                </p>
+            </div>
+        </div>
+        <div class="container-fluid mt-3 mb-3">
+            <div class="card-deck">
+                <div class="card">
+                    <div class="card-img-top text-center mt-3">
+                        <i class="fas fa-hat-cowboy-side fa-5x"></i>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Farms</h5>
+                        <p class="card-text">Have more than one farm? No Problem. Our system was designed with multi-farm
+                            organizations in mind. Animals, Users, Pens, and Groups are all organized within a farm so you
+                            can keep everything neat and tidy.</p>
+                        <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-img-top text-center mt-3">
+                        <i class="fas fa-street-view fa-5x"></i>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Pens</h5>
+                        <p class="card-text">Keep track of your animals physical location by tracking their pen. This is a
+                            one-to-one mapping which means your animal should never be in two places at once! This doesn't
+                            mean they still can't escape occasionally though, so keep those fences maintained!</p>
+                        <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-img-top text-center mt-3">
+                        <i class="far fa-object-group fa-5x"></i>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Groups</h5>
+                        <p class="card-text">Organize your animals into logical groups to help make reporting and managing
+                            easier. You can create groups to your hearts content and animals can be in multiple groups. Our tool
+                            makes the process of organizing these really simple and easy to do on the go!</p>
+                        <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid bg-secondary mt-4 p-3 text-white">
+            <div class="row">
+                <div class="col-md-5">
+                    <img class="img-fluid" src="http://intelliherd.com/wp-content/uploads/2019/11/dashboard-screenshot.png"
+                        alt="screenshot">
+                </div>
+                <div class="col-md-2 d-flex align-items-center justify-content-around">
+                    <i class="fas fa-tachometer-alt fa-5x"></i>
+                </div>
+                <div class="col-md-5">
+                    <h3><strong>Powerful Dashboards and Tools</strong></h3>
+                    <br>
+                    <p class="lead">Our developers have actually used the tools between cutting horns and branding. We know that
+                        the youngsters can't have an excuse to get out of helping out and getting dirty. We put a love of
+                        thought and time into giving you tools that work with you, and not against you. Our tools are
+                        streamlined to work with real workflows while your out on the job.</p>
+        
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid mt-3 mb-3">
+            <div class="card-deck">
+                <div class="card">
+                    <div class="card-img-top text-center mt-3">
+                        <i class="fas fa-syringe fa-5x"></i>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Vaccinations</h5>
+                        <p class="card-text">Trouble keeping track of which animals are up to code for immunizations? Our simple
+                            and fast Vaccine Wizard helps you record vaccines in real time so you have all the data you need to
+                            keep tabs on all of your critters.</p>
+                        <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-img-top text-center mt-3">
+                        <i class="fas fa-file-medical fa-5x"></i>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Health</h5>
+                        <p class="card-text">Tracking patterns in animal health can give great insight into your operations.
+                            Also, you can keep everyone on your team up to speed on your animals by tracking health events!</p>
+                        <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-img-top text-center mt-3">
+                        <i class="far fa-clipboard fa-5x"></i>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Notes</h5>
+                        <p class="card-text">Let's be honest. You can never find a pen but you can always find a phone. Record
+                            notes about each animal so they won't get lost and can be viewed by others.</p>
+                        <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid mt-3 pt-3 text-center">
+            <div class="row">
+                <div class="container-fluid d-md-inline-flex text-dark align-items-center justify-content-center">
+                    <h1><strong>So easy Dad can do it.</strong></h1>
+                    <h3 class="ml-3"><small>And that's saying something...</small></h3>
+                </div>
+                <p>
+                </p>
+            </div>
+        </div>
+        <div class="container-fluid bg-dark mt-4 p-3 text-white">
+            <div class="row">
+                <div class="col-md-7">
+                    <img class="img-fluid" src="http://intelliherd.com/wp-content/uploads/2019/11/dad-barn.jpg"
+                        alt="screenshot">
+                </div>
+                <div class="col-md-5">
+                    <span class="text-center">
+                        <h1 class="display-2"><i class="fas fa-home fa-2x"></i></h1>
+                    </span>
+                    <br>
+                    <p class="lead"><strong>IntelliHerd</strong> was originally only going to by used by my old man
+                        <small>(pictured here)</small>. Everything we built and improve is always looked at from the vantage
+                        point of my Dad. It is a great design philosophy that makes our software easy for farmers to use. My Dad
+                        is our tester.</p>
+                    <p class="lead">Every photo you see used with IntelliHerd was taken around our family farm with our family.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid mt-3 pt-3 text-center">
+            <div class="row">
+                <div class="container-fluid d-md-inline-flex text-dark align-items-center justify-content-center">
+                    <h1><strong>Support so good, you won't even cuss.</strong></h1>
+                </div>
+                <p>
+                </p>
+            </div>
+        </div>
+        <div class="container-fluid bg-dark mt-4 p-3 text-white">
+            <div class="row">
+                <div class="col-md-5">
+                    <span class="text-center">
+                        <h1 class="display-2"><i class="fas fa-hands-helping fa-2x"></i></h1>
+                    </span>
+                    <br>
+                    <p class="lead">Our roots stem from a long line of dairy farmers in Wyoming. We have lived through the ups
+                        and downs of market prices and know the hard work it takes.</p>
+                    <h4 class="m-3"><strong>We want to help.</strong></h4>
+                    <p class="lead">When you call you will always talk to a human. More than likely, they will be a farmer,
+                        rancher, or cowpoke just like you. We are a family business literally and figuratively.</p>
+                </div>
+                <div class="col-md-7">
+                    <img class="img-fluid" src="http://intelliherd.com/wp-content/uploads/2019/11/branding.jpg"
+                        alt="screenshot">
+                </div>
+            </div>
+        </div>
+        </div>
+
+    {%- endblock content %}
+
+    <!-- Footer -->
+    {%- block footer %}
+        {{ super() }}
+    {%- endblock footer %}
+</body>
+{%- endblock body %}

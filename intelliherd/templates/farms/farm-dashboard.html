@@ -1,0 +1,41 @@
+{% extends "site/base.html" %}
+{% import "site/base.html" as layout with context %}
+{% block navbar %}
+{{super()}}
+{%- endblock navbar %}
+{% block sidebar %}
+{{super()}}
+{%- endblock sidebar %}
+{% block content_header -%}
+<h1>
+    {{farm.name}}
+    <small> Dashboard</small>
+</h1>
+<ol class="breadcrumb">
+    <li><a href={{url_for('account.accountDashboard')}}>Home</a></li>
+    <li><a href={{url_for('farms.allFarms')}}> Farms</a></li>
+    <li><a href="#"></i> {{farm.name}}</a></li>
+</ol>
+{%- endblock content_header %}
+{% block content -%}
+<div class="row">
+    <div class="col-lg-3 m-2">
+        {{widgets.boxButton(iconClass="fas fa-hat-cowboy", textClass="text-white", text='Animals', link=url_for('animals.animalsDashboard', farm_id=farm.farm_id), classes="bg-info")}}
+    </div>
+
+    <div class="col-lg-3 m-2">
+        {{widgets.boxButton(iconClass="fas fa-object-group", textClass="text-white", text='Pens', link=url_for('farms.pensDashboard', farm_id=farm.farm_id), classes="bg-info")}}
+
+    </div>
+
+    <div class="col-lg-3 m-2">
+        {{widgets.boxButton(iconClass="fas fa-map-marker-alt", textClass="text-white", text='Locations', link=url_for('locations.allLocations', farm_id=farm.farm_id), classes="bg-info")}}
+
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col-lg-3">
+        {{widgets.boxButton(iconClass="fas fa-users", textClass="text-white", text='Users', link=url_for('farms.farmDashboard', farm_id=farm.farm_id), classes="bg-info")}}
+    </div>
+</div>
+{%- endblock content %}

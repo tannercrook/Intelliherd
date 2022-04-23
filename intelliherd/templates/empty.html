@@ -1,0 +1,22 @@
+{% extends "site/base.html" %}
+{% import "site/base.html" as layout with context %}
+{% block navbar %}
+{{super()}}
+{%- endblock navbar %}
+{% block sidebar %}
+{{super()}}
+{%- endblock sidebar %}
+{% block content_header -%}
+          <h3>
+            Empty
+            <small>A blank page</small>
+          </h3>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Empty</li>
+          </ol>
+{%- endblock content_header %}
+{% block content -%}
+{%- endblock content %}
+
+

@@ -1,0 +1,117 @@
+{% extends "site/base.html" %}
+{% import "site/base.html" as layout with context %}
+{% block navbar %}
+{{super()}}
+{%- endblock navbar %}
+{% block sidebar %}
+{{super()}}
+{%- endblock sidebar %}
+{% block content_header -%}
+<h2>
+    {{pen.name}}
+    <small></small>
+</h2>
+<ol class="breadcrumb">
+    <li><a href={{url_for('account.accountDashboard')}}> Home</a></li>
+    <li><a href={{url_for('farms.allFarms')}}> Farms</a></li>
+    <li><a href={{url_for('farms.farmDashboard', farm_id=farm.farm_id)}}>{{farm.name}}</a></li>
+    <li><a href={{url_for('farms.pensDashboard', farm_id=farm.farm_id)}}>Pens</a></li>
+    <li><a href={{url_for('pens.viewPen', pen_id=pen.pen_id)}}>{{pen.name}}</a></li>
+    <li><a href="#">  Wizard</a></li>
+</ol>
+{%- endblock content_header %}
+{% block content -%}
+<div class="container-fluid">
+    <!-- Toolbar -->
+    <div class="row">
+        
+    </div>
+    <hr>
+    <div class="container">
+        <script>
+            var app = angular.module('penWizard', [], function ($interpolateProvider) {
+                $interpolateProvider.startSymbol('[[');
+                $interpolateProvider.endSymbol(']]');
+            });
+            app.controller("wzrdCtrl", function ($scope, $http) {
+                $scope.animals = {{ animals | safe }};
+                $scope.pen_id = {{ pen_id }};
+                $scope.searchResults = [];
+                $scope.members = [];
+        
+                $scope.search = function () {
+                    // Make sure at least one character is typed
+                    if ($scope.animalSearch.length > 0) {
+                        // Wipe out old records
+                        $scope.searchResults = []
+                        for (i = 0; i < $scope.animals.length; i++) {
+                            if ($scope.animals[i].number.includes($scope.animalSearch)) {
+                                $scope.searchResults.push($scope.animals[i]);
+                            } else if ($scope.animals[i].name.toLowerCase().includes($scope.animalSearch.toLowerCase())) {
+                                $scope.searchResults.push($scope.animals[i]);
+                            }
+                        }
+                    } else {
+                        $scope.searchResults = []
+                    }
+                }
+        
+        
+                $scope.addPenMember = function (animal) {
+                    $http({
+                        method: 'POST',
+                        url: 'wizard/add/'+animal.animal_id,
+                        data: $.param({note: 'Via Pen Wizard'}),
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    }).then(function (response) {
+                            // First function handles success
+                            $scope.content = response.data;
+                            // Add the record to the list of recorded ones
+                            $scope.members.push({'animal_number':response.data.animal_number,'animal_name':response.data.animal_name,'pen_name':response.data.pen_name, 'status':response.data.status});
+                        }, function (response) {
+                            // Second function handles error
+                            $scope.content = "Something went wrong";
+                        });
+                }
+            }); 
+        </script>
+    
+        <div ng-app="penWizard" ng-controller="wzrdCtrl">
+            <div class="row">
+                <div class="col-md-8">
+                    <input ng-model="animalSearch" ng-keyup="search()" placeholder="Animal Search">
+                    <table class="table border border-striped bg-white">
+                        <tr>
+                            <th>Number</th>
+                            <th>Name</th>
+                            <th>Move</th>
+                        </tr>
+                        <tr ng-repeat="animal in searchResults">
+                            <td>[[animal.number]]</td>
+                            <td>[[animal.name]]</td>
+                            <td><button class="btn btn-success" ng-click="addPenMember(animal)">Move into {{pen.name}}</button></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                    <h3>Members</h3>
+                    <table class="table border border-striped bg-white">
+                        <tr>
+                            <th>Animal Number</th>
+                            <th>Animal Name</th>
+                            <th>Pen</th>
+                            <th>Status</th>
+                        </tr>
+                        <tr ng-repeat="member in members">
+                            <td>[[member.animal_number]]</td>
+                            <td>[[member.animal_name]]</td>
+                            <td>[[member.pen_name]]</td>
+                            <td>[[member.status]]</td>
+                        </tr>
+                    </table>
+            </div>
+        </div>
+    </div>
+</div>
+{%- endblock content %}

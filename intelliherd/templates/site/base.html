@@ -1,0 +1,168 @@
+{% import "site/widgets/widgets.html" as widgets %}
+{% block html %}
+<!DOCTYPE html>
+<html lang="en" class="bg-dark" style="height: 100%; min-height: 100%;">
+{% block head %}
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block meta %}
+
+    {% endblock meta %}
+    {% block title %}
+    <title>Intelliherd</title>
+    {% endblock title %}
+    {% block includes %}
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <!-- Ubuntu Font -->
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/de7111c66b.js" crossorigin="anonymous"></script>
+    {% endblock includes %}
+    {% block styles %}
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{url_for('static', filename='css/custom.css')}}" />
+    <!-- Angular -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <!-- Chart.JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <!-- DataTables -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+    <!-- Custom JS -->
+    <script src="{{url_for('static', filename='js/dashboard.js')}}"></script>
+    {% endblock styles %}
+</head>
+{% endblock head %}
+{% block body %}
+<!-- Body -->
+
+<body style="min-height: 100%;">
+
+    {% block header %}
+    <!-- Header -->
+    <header>
+        {% block navbar %}
+        <!-- Navigation -->
+        <nav class="navbar navbar-dark bg-dark flex-md-nowrap p-0 shadow text-white">
+            <i class="fas fa-bars mr-3 ml-3" onclick="toggleSidebar()"></i>
+            <a class="mr-auto">IntelliHerd</a>
+            <input class="form-control form-control-dark w-50" type="text" placeholder="Search" aria-label="Search">
+            <ul class="navbar-nav px-3">
+              <li class="nav-item text-nowrap">
+                <a class="nav-link" href="#">Sign out</a>
+              </li>
+            </ul>
+          </nav>
+        {% endblock navbar %}
+
+    </header>
+    {% endblock header %}
+
+    {% block main %}
+    <!-- Main container used for content -->
+    <div class="container-fluid h-100">
+        <div class="row" style="height: calc(100vh - 48px);">
+            {% block sidebar %}
+            <!-- Left side Sidebar -->
+            <nav class="col-2 d-none d-md-block bg-light sidebar" id="sidebar">
+                <div class="">
+                  <ul class="nav flex-column">
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">
+                        <span data-feather="home"></span>
+                        Dashboard <span class="sr-only">(current)</span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">
+                        <span data-feather="file"></span>
+                        Orders
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">
+                        <span data-feather="shopping-cart"></span>
+                        Products
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">
+                        <span data-feather="users"></span>
+                        Customers
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">
+                        <span data-feather="bar-chart-2"></span>
+                        Reports
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">
+                        <span data-feather="layers"></span>
+                        Integrations
+                      </a>
+                    </li>
+                  </ul>
+          
+                  <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span>Saved reports</span>
+                    <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
+                      <span data-feather="plus-circle"></span>
+                    </a>
+                  </h6>
+                  <ul class="nav flex-column mb-2">
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">
+                        <span data-feather="file-text"></span>
+                        Current month
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">
+                        <span data-feather="file-text"></span>
+                        Last quarter
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">
+                        <span data-feather="file-text"></span>
+                        Social engagement
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">
+                        <span data-feather="file-text"></span>
+                        Year-end sale
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </nav>
+            {% endblock sidebar %}
+            <main id="main" role="main" class="col-md-10">
+                <div class="w-100 d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            {% block content_header %}
+            {% endblock content_header %}
+                </div>
+            {% block content %}
+            <!-- Content -->
+
+            {% endblock content %}
+            </main>
+          </div>
+        </div>
+      {% endblock main %}
+</body>
+{% endblock body %}
+
+</html>
+{% endblock html %}

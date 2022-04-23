@@ -1,0 +1,208 @@
+{% extends "site/base.html" %}
+{% import "site/base.html" as layout with context %}
+{% import "site/widgets/animalWidgets.html" as animalWidgets with context %}
+{% block navbar %}
+{{super()}}
+{%- endblock navbar %}
+{% block sidebar %}
+{{super()}}
+{%- endblock sidebar %}
+{% block content_header -%}
+<h2>
+    {{farm.name}}
+    <small> View Animal</small>
+</h2>
+<ol class="breadcrumb">
+    <li><a href={{url_for('account.accountDashboard')}}> Home</a></li>
+    <li><a href={{url_for('farms.allFarms')}}> Farms</a></li>
+    <li><a href={{url_for('farms.farmDashboard', farm_id=farm.farm_id)}}>
+            {{farm.name}}</a></li>
+    <li><a href={{url_for('animals.animalsDashboard', farm_id=farm.farm_id)}}>
+            Animals</a></li>
+    <li><a href="#"> View Animal</a></li>
+</ol>
+{%- endblock content_header %}
+{% block content -%}
+{{ animalWidgets.animalViewMenu(selectedItemID="demographics") }}
+<div class="container-fluid mt-2">
+    <h4>Animal ID: {{animal.animal_id}}</h4>
+    <form class="form p-2 border rounded" id="add-animal-form" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.animal_type_id.label() }}{{ form.animal_type_id() }}
+        </div>
+        <div class="form-group">
+            {{ form.gender.label() }}{{ form.gender(_class="form-control") }}
+            {{ form.birthdate.label() }}{{ form.birthdate(_class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.number.label() }}{{ form.number(_class="form-control") }}
+            {{ form.name.label() }}{{ form.name(_class="form-control") }}
+        </div>
+        <button type="submit" class="btn btn-lg btn-primary">Save</button>
+        <a class="btn btn-danger" href="#" data-toggle="modal" data-target="#delete">Delete</a>
+        <div class="container">
+            {% for field in form.errors %}
+            {% for error in form.errors[field] %}
+            <div class="alert alert-error">
+                <strong>Error!</strong> {{error}}
+            </div>
+            {% endfor %}
+            {% endfor %}
+        </div>
+    </form>
+</div>
+<div class="modal" id="delete" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Animal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="lead">Are you sure you want to delete this animal? It cannot be undone.</p>
+                <a class="btn btn-danger"
+                    href="{{url_for('animals.deleteAnimal', animal_id=animal.animal_id)}}">Delete</a>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+    <script>
+        var app = angular.module('relationshipsWizard', [], function ($interpolateProvider) {
+            $interpolateProvider.startSymbol('[[');
+            $interpolateProvider.endSymbol(']]');
+        });
+        app.controller("wzrdCtrl", function ($scope, $http) {
+
+            $scope.searchResults = [];
+            $scope.animals = [];
+            $scope.farm_id = {{ farm.farm_id | safe }};
+            $scope.user_id = {{ user.user_id | safe }};
+            $scope.animal_id = {{ animal.animal_id | safe }};
+            $scope.token = '{{ user.password | safe }}';
+
+
+
+            angular.element(document).ready(function () {
+                $scope.getAnimals();
+            });
+
+
+
+            $scope.getAnimals = function () {
+                $http.get('/api/v1/animals/'+$scope.farm_id).then(function (response) {
+                    // First function handles success
+                    $scope.animals = response.data;
+                });
+            };
+
+            $scope.search = function () {
+                // Make sure at least one character is typed
+                if ($scope.animalSearch.length > 0) {
+                    // Wipe out old records
+                    $scope.searchResults = []
+                    for (i = 0; i < $scope.animals.length; i++) {
+                        if ($scope.animals[i].number.includes($scope.animalSearch)) {
+                            $scope.searchResults.push($scope.animals[i]);
+                        } else if ($scope.animals[i].name.toLowerCase().includes($scope.animalSearch.toLowerCase())) {
+                            $scope.searchResults.push($scope.animals[i]);
+                        }
+                    }
+                }
+            }
+
+            $scope.link = function (animal, type) {
+                var params='animal_id='+$scope.animal_id+'&parent_id='+animal.animal_id+'&token='+$scope.token+'&relationship_type_id='+type;
+                $http.put('/api/v1/relationships?'+params, null, null).then(function (response) {
+                    // First function handles success
+                    var result = response.data;
+                    location.reload();
+                });
+            }
+
+            $scope.unlinkMother = function(){
+                var params='animal_id={{animal.animal_id}}&parent_id={{mother.animal_id}}&token=';
+                $http.delete('/api/v1/relationships/unlink?'+params).then(function (response) {
+                    // First function handles success
+                    var result = response.data;
+                    location.reload();
+                });
+            }
+
+            $scope.unlinkFather = function(){
+                var params='animal_id={{animal.animal_id}}&parent_id={{father.animal_id}}&token=';
+                $http.delete('/api/v1/relationships/unlink?'+params).then(function (response) {
+                    // First function handles success
+                    var result = response.data;
+                    location.reload();
+                });
+            }
+        });
+    </script>
+    <div ng-app="relationshipsWizard" ng-controller="wzrdCtrl">
+        <div class="container-fluid mt-2">
+            <h3>Geneology</h3>
+            <p><b>Mother: </b>
+                {% if mother != None %}
+                    <a href="{{url_for('animals.viewAnimal', farm_id=farm.farm_id, animal_id=mother.animal_id)}}">{{ mother.name }} {{mother.number}}</a><a class="ml-2" href="#unlink" ng-click="unlinkMother()"><i class="fas fa-unlink"></i></a>
+                {% else %}
+                    <a href="#motherPicker" data-toggle="modal" data-target="#motherPicker">Link</a></p>
+                {% endif %}
+            <p><b>Father: </b>
+                {% if father != None %}
+                    <a href="{{url_for('animals.viewAnimal', farm_id=farm.farm_id, animal_id=father.animal_id)}}">{{ father.name }} {{father.number}}</a><a class="ml-2" href="#unlink" ng-click="unlinkFather()"><i class="fas fa-unlink"></i></a>
+                {% else %}
+                    <a href="#fatherPicker" data-toggle="modal" data-target="#fatherPicker">Link</a></p>
+                {% endif %}
+        </div>
+    <div class="modal" id="motherPicker" tabindex="-1" role="dialog" aria-labelledby="motherPicker" aria-hidden="true">
+        <div class="container mt-4 p-4 bg-dark">
+            <div class="row">
+                <div class="col-md-12">
+                    <input ng-model="animalSearch" ng-keyup="search()" placeholder="Animal Search">
+                    <table class="table border border-striped bg-white">
+                        <tr>
+                            <th>Number</th>
+                            <th>Name</th>
+                            <th>Action</th>
+                        </tr>
+                        <tr ng-repeat="animal in searchResults">
+                            <td>[[animal.number]]</td>
+                            <td>[[animal.name]]</td>
+                            <td><button class="btn btn-success" ng-click="link(animal,1)" data-dismiss="modal">Link</button></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="fatherPicker" tabindex="-1" role="dialog" aria-labelledby="fatherPicker" aria-hidden="true">
+        <div class="container mt-4 p-4 bg-dark">
+            <div class="row">
+                <div class="col-md-12">
+                    <input ng-model="animalSearch" ng-keyup="search()" placeholder="Animal Search">
+                    <table class="table border border-striped bg-white">
+                        <tr>
+                            <th>Number</th>
+                            <th>Name</th>
+                            <th>Action</th>
+                        </tr>
+                        <tr ng-repeat="animal in searchResults">
+                            <td>[[animal.number]]</td>
+                            <td>[[animal.name]]</td>
+                            <td><button class="btn btn-success" ng-click="link(animal,2)" data-dismiss="modal">Link</button></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{%- endblock content %}

@@ -1,0 +1,18 @@
+
+
+{% macro boxButton(iconClass="fas fa-hand-pointer", textClass="", text='', link='#', classes="") %}
+<a class="text-decoration-none w-100 " href="{{link}}">
+    <div class="p-2 {{classes}}">
+        <div class="row align-items-center justify-content-between">
+            <div class="col-2">
+                <i class="{{iconClass}} fa-5x mr-3 {{textClass}}"></i>
+            </div>
+            <div class="col-8">
+                <h3 class="text-center {{textClass}}">{{text}}</h3>
+            </div>
+        </div>
+    </div>
+</a>
+{% endmacro %}
+
+

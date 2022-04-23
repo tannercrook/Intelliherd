@@ -1,0 +1,38 @@
+{% extends "site/base.html" %}
+{% import "site/base.html" as layout with context %}
+{% block navbar %}
+{{super()}}
+{%- endblock navbar %}
+{% block sidebar %}
+{{super()}}
+{%- endblock sidebar %}
+{% block content_header -%}
+<h2>
+    {{pen.name}}
+    <small></small>
+</h2>
+<ol class="breadcrumb">
+    <li><a href={{url_for('account.accountDashboard')}}>Home</a></li>
+    <li><a href={{url_for('farms.allFarms')}}> Farms</a></li>
+    <li><a href={{url_for('farms.farmDashboard', farm_id=farm.farm_id)}}>{{farm.name}}</a></li>
+    <li><a href={{url_for('farms.pensDashboard', farm_id=farm.farm_id)}}>Pens</a></li>
+    <li><a href="#">{{pen.name}}</a></li>
+</ol>
+{%- endblock content_header %}
+{% block content -%}
+<div class="container-fluid">
+    <!-- Toolbar -->
+    <div class="row">
+        <a class="btn btn-lg btn-info" href={{url_for('pens.penWizard', pen_id=pen.pen_id)}}><i class="fa fa-magic"></i> Wizard</a>
+    </div>
+    <hr>
+
+    <!-- Pen Table -->
+    {{ table }}
+</div>
+<script>
+    $(document).ready(function () {
+        $('#animalTable').DataTable();
+    });
+</script>
+{%- endblock content %}

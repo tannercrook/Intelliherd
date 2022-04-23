@@ -1,0 +1,30 @@
+{% extends "site/base.html" %}
+{% import "site/base.html" as layout with context %}
+{% import "site/widgets/animalWidgets.html" as animalWidgets with context %}
+{% block navbar %}
+{{super()}}
+{%- endblock navbar %}
+{% block sidebar %}
+{{super()}}
+{%- endblock sidebar %}
+{% block content_header -%}
+<h2>
+    {{farm.name}}
+    <small> View Animal</small>
+</h2>
+<ol class="breadcrumb">
+    <li><a href={{url_for('account.accountDashboard')}}> Home</a></li>
+    <li><a href={{url_for('farms.allFarms')}}> Farms</a></li>
+    <li><a href={{url_for('farms.farmDashboard', farm_id=farm.farm_id)}}>{{farm.name}}</a></li>
+    <li><a href={{url_for('animals.animalsDashboard', farm_id=farm.farm_id)}}>Animals</a></li>
+    <li><a href="#"> View Animal</a></li>
+</ol>
+{%- endblock content_header %}
+{% block content -%}
+{{ animalWidgets.animalViewMenu(selectedItemID="pens") }}
+<div class="container-fluid mt-2">
+    {{table}}
+</div>
+
+</div>
+{%- endblock content %}

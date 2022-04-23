@@ -1,0 +1,79 @@
+{% extends "public/base.html" %}
+{%- block head %}
+{{ super() }}
+{%- endblock head %}
+
+{%- block body %}
+
+<body>
+    <!-- Header and Nav -->
+    {%- block header %}
+    {{ super() }}
+    {%- endblock header %}
+
+    <!-- Content -->
+    {%- block content %}
+    <div class="jumbotron">
+        <h1 class="display-4"><strong>Step 1: </strong>Create your account</h1>
+    </div>
+
+    <div class="container">
+        <form class="form border rounded p-2" id="user-form" method="POST">
+            {{userForm.hidden_tag()}}
+            <div class="form-row">
+                <div class="col-md-4">
+                    {{userForm.email.label()}}
+                    {{userForm.email(class="form-control", placeholder="Email")}}
+                </div>
+            </div>
+            <br>
+            <div class="form-row">
+                <div class="col-md-6">
+                    {{userForm.first_name.label()}}
+                    {{userForm.first_name(class="form-control", placeholder="First Name")}}
+                </div>
+                <div class="col-md-6">
+                    {{userForm.last_name.label()}}
+                    {{userForm.last_name(class="form-control", placeholder="Last Name")}}
+                </div>
+            </div>
+            <br>
+            <div class="form-row">
+                <div class="col-md-6">
+                    {{userForm.password.label()}}
+                    {{userForm.password(class="form-control",placeholder="Password")}}
+                </div>
+                <div class="col-md-6">
+                    {{userForm.password_confirm.label()}}
+                    {{userForm.password_confirm(class="form-control",placeholder="Confirm Password")}}
+                </div>
+            </div>
+            <br>
+            <div class="form-row">
+                <div class="col-md-4">
+                    <button class="btn btn-lg btn-outline-primary" type="submit">Submit</button>
+                </div>
+            </div>
+            <div class="text-danger">
+                <ul>
+                {% for message in userForm.errors %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                {% with messages = get_flashed_messages() %}
+                    {% for message in messages %}
+                        <li>{{message}}</li>
+                    {% endfor %}
+                    </ul>
+                {% endwith %}
+            </div>
+        </form>
+    </div>
+
+    {%- endblock content %}
+
+    <!-- Footer -->
+    {%- block footer %}
+    {{ super() }}
+    {%- endblock footer %}
+</body>
+{%- endblock body %}

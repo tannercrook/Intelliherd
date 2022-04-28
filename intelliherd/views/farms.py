@@ -18,7 +18,7 @@ farms = Blueprint('farms', __name__, url_prefix='/farms')
 def allFarms():
 
     # See if the user has any farms available. If not, forward to the get subscription page
-    farmCount = db_session.query(SystemUser).join(Farm).filter(SystemUser.user_id==current_user.user_id).count()
+    farmCount = db_session.query(SystemUser).join(Farm, SystemUser.user_id == Farm.user_id).filter(SystemUser.user_id==current_user.user_id).count()
 
     if farmCount == 0:
         # TODO - User does not have any farms, let them know and offer subscription
@@ -27,7 +27,7 @@ def allFarms():
         # User has one or more rights to a farm.
         # Get the farms
         userFarms = []
-        userFarms = db_session.query(Farm).filter(Farm.user_id==current_user.user_id)
+        userFarms = db_session.query(Farm).filter(Farm.user_id==current_user.user_id).all()
 
         return render_template('farms/farms.html', current_user=current_user, userFarms=userFarms)
 

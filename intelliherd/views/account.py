@@ -7,7 +7,7 @@ from wtforms import StringField, IntegerField, SubmitField, SelectField, Passwor
 from wtforms.validators import DataRequired, Length, Email
 from sqlalchemy.orm import sessionmaker, scoped_session, query
 
-from models.objects import SystemUser,
+from models.objects import SystemUser
 from models.Connection import db_session
 
 # set blueprint

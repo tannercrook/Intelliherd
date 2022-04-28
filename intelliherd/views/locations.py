@@ -7,7 +7,7 @@ from wtforms.validators import DataRequired, Length, Email
 from sqlalchemy.orm import sessionmaker, scoped_session, query
 from flask_table import Table, Col
 
-from models.objects import SystemUser, Farm, FarmUser, Location
+from models.objects import SystemUser, Farm, Location
 from models.Connection import db_session
 
 # set blueprint

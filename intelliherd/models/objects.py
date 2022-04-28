@@ -1,18 +1,20 @@
 # coding: utf-8
 import flask_login 
-from flask_jsontools import JsonSerializableBase
+#from flask_jsontools import JsonSerializableBase
+#from flask.ext.jsontools import JsonSerializableBase
 from flask_login import UserMixin
-from sqlalchemy import Column, Date, DateTime, ForeignKey, Integer, String, Table, text, MetaData, Text
+from sqlalchemy import Column, Date, DateTime, ForeignKey, Integer, String, Table, text, MetaData, Text, Numeric
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import MONEY
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
+from werkzeug.security import check_password_hash
 
 
 import dateutil
 import hashlib, uuid
 
-Base = declarative_base(cls=(JsonSerializableBase))
+Base = declarative_base()
 metadata = Base.metadata
 
 
@@ -34,14 +36,14 @@ class Animal(Base):
     modified_by = Column(ForeignKey('system_user.user_id'), nullable=False, server_default=text("1"))
     animal_status_id = Column(ForeignKey('animal_status.animal_status_id'), nullable=False, server_default=text("1"))
 
-    animal_status = relationship('AnimalStatu')
+    animal_status = relationship('AnimalStatus')
     animal_type = relationship('AnimalType')
     system_user = relationship('SystemUser', primaryjoin='Animal.created_by == SystemUser.user_id')
     farm = relationship('Farm')
     system_user1 = relationship('SystemUser', primaryjoin='Animal.modified_by == SystemUser.user_id')
 
 
-class AnimalStatu(Base):
+class AnimalStatus(Base):
     __tablename__ = 'animal_status'
 
     animal_status_id = Column(Integer, primary_key=True)
@@ -223,11 +225,7 @@ class SystemUser(UserMixin, Base):
         return self.user_id
 
     def passwordMatches(self, password):
-        hashedPassword = hashlib.sha512(str(password+self.salt).encode('utf-8')).hexdigest()
-        if(hashedPassword == self.password):
-            return True
-        else:
-            return False
+        return check_password_hash(self.password, password)
 
 
     # AdminLTE Components

@@ -5,7 +5,7 @@ from models.objects import SystemUser, Base, metadata
 import config.database_auth as dbauth
 
 
-engine = create_engine("postgresql+psycopg2://{}:{}@{}/{}}".format(dbauth.username,dbauth.password,dbauth.host,dbauth.database), implicit_returning=True)
+engine = create_engine("postgresql+psycopg2://{}:{}@{}/{}".format(dbauth.username,dbauth.password,dbauth.host,dbauth.database), implicit_returning=True)
 engine.connect()
 
 db_session = scoped_session(sessionmaker(autocommit=False,autoflush=False,bind=engine))

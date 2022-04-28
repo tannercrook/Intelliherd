@@ -17,7 +17,7 @@ auth = Blueprint('auth', __name__)
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        print("here")
+        print(form.email.data)
         user = db_session.query(SystemUser).filter(SystemUser.email == form.email.data).one()
         if (user != None):
             if user.passwordMatches(form.password.data):

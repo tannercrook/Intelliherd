@@ -10,7 +10,7 @@ from flask_table import Table, Col, OptCol, LinkCol
 import datetime
 import json
 
-from models.objects import Farm, Animal, SystemUser, Pen, PenMember, FarmUser, AnimalType, AnimalStatus
+from models.objects import Farm, Animal, SystemUser, Pen, PenMember, AnimalType, AnimalStatus
 from models.Connection import db_session
 
 # set blueprint

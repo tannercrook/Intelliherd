@@ -2,9 +2,7 @@ from flask import Flask, request
 from flask import render_template
 from flask_login import LoginManager, login_required, current_user
 from flask_sqlalchemy import SQLAlchemy
-from flask_mail import Mail, Message
-from flask_restful import Resource, Api
-import stripe
+
 
 
 # Views
@@ -38,7 +36,6 @@ app.register_blueprint(auth)
 app.register_blueprint(account)
 app.register_blueprint(farms)
 app.register_blueprint(locations)
-app.register_blueprint(orgs)
 app.register_blueprint(animals)
 app.register_blueprint(pens)
 
@@ -52,13 +49,6 @@ login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 login_manager.init_app(app)
 
-# Flask Mail
-app.config['MAIL_SERVER']='somemail'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-
-mail = Mail(app)
 
 
 

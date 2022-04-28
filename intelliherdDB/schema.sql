@@ -62,9 +62,7 @@ CREATE TABLE state (
 
 
 -- public."location" definition
-
 -- Drop table
-
 -- DROP TABLE "location";
 
 CREATE TABLE "location" (

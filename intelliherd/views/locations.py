@@ -7,7 +7,7 @@ from wtforms.validators import DataRequired, Length, Email
 from sqlalchemy.orm import sessionmaker, scoped_session, query
 from flask_table import Table, Col
 
-from models.objects import SystemUser, Organization, Role, Farm, FarmUser, Location
+from models.objects import SystemUser, Farm, FarmUser, Location
 from models.Connection import db_session
 
 # set blueprint
@@ -17,10 +17,10 @@ locations = Blueprint('locations', __name__, url_prefix='/locations')
 @login_required
 def allLocations(farm_id):
 
-    locations = db_session.query(Location).join(Organization).join(Farm).join(FarmUser).join(SystemUser, FarmUser.user_id==current_user.user_id).filter(Farm.farm_id==farm_id).all()
+    locations = db_session.query(Location).join(SystemUser, Location.user_id==current_user.user_id).filter(Farm.farm_id==farm_id).all()
 
     # Get the farm
-    farm = db_session.query(Farm).join(FarmUser).filter(Farm.farm_id==farm_id).one()
+    farm = db_session.query(Farm).filter(Farm.farm_id==farm_id).one()
 
     # Build the table for locations
     table = LocationTable(locations)

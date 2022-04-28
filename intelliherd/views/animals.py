@@ -11,7 +11,7 @@ from sqlalchemy.sql.functions import func
 from flask_table import Table, Col, OptCol, LinkCol
 import json
 
-from models.objects import SystemUser, Organization, OrgUser, Farm, FarmUser, Animal, AnimalStatus, AnimalType, Vaccine, VaccineDose, Pen, PenMember, Relationship, RelationshipType
+from models.objects import SystemUser, Farm, Animal, AnimalStatus, AnimalType, Vaccine, VaccineDose, Pen, PenMember, Relationship, RelationshipType
 from models.Connection import db_session
 
 # set blueprint
@@ -34,7 +34,7 @@ animals = Blueprint('animals', __name__)
 @login_required
 def animalsDashboard(farm_id):
     
-    farm = db_session.query(Farm).join(FarmUser, FarmUser.farm_id==Farm.farm_id).filter(FarmUser.user_id==current_user.user_id).filter(Farm.farm_id==farm_id).one()
+    farm = db_session.query(Farm).filter(Farm.user_id==current_user.user_id).filter(Farm.farm_id==farm_id).one()
     
     # Get data for the widgets
     # TODO - Get data for the widgets on the dashboard
@@ -63,7 +63,7 @@ def animalsDashboard(farm_id):
 def addAnimal(farm_id):
 
     # Get the current farm (also checks permission)
-    farm = db_session.query(Farm).join(FarmUser, FarmUser.farm_id==Farm.farm_id).filter(FarmUser.user_id==current_user.user_id).filter(Farm.farm_id==farm_id).one()
+    farm = db_session.query(Farm).filter(Farm.user_id==current_user.user_id).filter(Farm.farm_id==farm_id).one()
     
     # Set up the form for the new animal
     form = initializeAnimalForm()
@@ -102,7 +102,7 @@ def addAnimal(farm_id):
 @login_required
 def viewFarmAnimals(farm_id):
     # Get the current farm (also checks permission)
-    farm = db_session.query(Farm).join(FarmUser, FarmUser.farm_id==Farm.farm_id).filter(FarmUser.user_id==current_user.user_id).filter(Farm.farm_id==farm_id).one()
+    farm = db_session.query(Farm).filter(Farm.user_id==current_user.user_id).filter(Farm.farm_id==farm_id).one()
     
     animals = db_session.query(Animal).join(Farm).filter(Farm.farm_id == farm_id).all()
     
@@ -176,7 +176,7 @@ def viewAnimalVaccines(farm_id, animal_id):
 @animals.route('/farms/<int:farm_id>/animals/vaccine-wizard', methods=['GET','POST'])
 @login_required
 def vaccineWizard(farm_id):
-    farm = db_session.query(Farm).join(FarmUser, FarmUser.farm_id==Farm.farm_id).filter(FarmUser.user_id==current_user.user_id).filter(Farm.farm_id==farm_id).one()
+    farm = db_session.query(Farm).filter(Farm.user_id==current_user.user_id).filter(Farm.farm_id==farm_id).one()
 
     # Get the Vaccines
     vaccines = []
@@ -260,7 +260,7 @@ def getAnimalTypes():
 
 def hasAnimalRights(user_id, animal_id):
     # Check to see if 
-    animalCount = db_session.query(SystemUser).join(FarmUser, SystemUser.user_id==FarmUser.user_id).join(Animal, FarmUser.farm_id==Animal.farm_id).filter(SystemUser.user_id == user_id).filter(Animal.animal_id == animal_id).count()
+    animalCount = db_session.query(SystemUser).join(Farm, SystemUser.user_id==Farm.user_id).join(Animal, Farm.farm_id==Animal.farm_id).filter(SystemUser.user_id == user_id).filter(Animal.animal_id == animal_id).count()
     if animalCount >= 1:
         return True
     return False

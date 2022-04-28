@@ -2,7 +2,7 @@
 
 from flask import Flask, request, Blueprint, jsonify
 from sqlalchemy.orm import sessionmaker, scoped_session, query
-from models.objects import SystemUser, Organization, Role, Farm, Animal
+from models.objects import SystemUser, Farm, Animal
 from models.Connection import db_session
 import json
 

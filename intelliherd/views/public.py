@@ -11,7 +11,7 @@ from flask_mail import Mail, Message
 import stripe
 import hashlib, uuid, secrets, string
 
-from models.objects import SystemUser, Organization, Role, Subscription, OrgUser
+from models.objects import SystemUser, Subscription, OrgUser
 from models.Connection import db_session
 
 # set blueprint

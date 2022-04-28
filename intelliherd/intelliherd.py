@@ -13,7 +13,6 @@ from views.auth import auth
 from views.account import account
 from views.farms import farms
 from views.locations import locations
-from views.organizations import orgs
 from views.animals import animals
 from views.pens import pens
 

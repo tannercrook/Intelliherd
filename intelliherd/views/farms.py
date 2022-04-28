@@ -7,7 +7,7 @@ from wtforms import StringField, IntegerField, SubmitField, SelectField, Passwor
 from wtforms.validators import DataRequired, Length, Email
 from sqlalchemy.orm import sessionmaker, scoped_session, query
 from flask_table import Table, Col, OptCol, LinkCol
-from models.objects import SystemUser, Organization, Role, Farm, FarmUser, Pen, PenMember
+from models.objects import SystemUser, Farm, Pen, PenMember
 from models.Connection import db_session
 
 # set blueprint
@@ -18,7 +18,7 @@ farms = Blueprint('farms', __name__, url_prefix='/farms')
 def allFarms():
 
     # See if the user has any farms available. If not, forward to the get subscription page
-    farmCount = db_session.query(SystemUser).join(FarmUser, FarmUser.user_id==SystemUser.user_id).filter(SystemUser.user_id==current_user.user_id).count()
+    farmCount = db_session.query(SystemUser).join(Farm).filter(SystemUser.user_id==current_user.user_id).count()
 
     if farmCount == 0:
         # TODO - User does not have any farms, let them know and offer subscription
@@ -27,7 +27,7 @@ def allFarms():
         # User has one or more rights to a farm.
         # Get the farms
         userFarms = []
-        userFarms = db_session.query(Farm).join(FarmUser, FarmUser.farm_id==Farm.farm_id).filter(FarmUser.user_id==current_user.user_id)
+        userFarms = db_session.query(Farm).filter(Farm.user_id==current_user.user_id)
 
         return render_template('farms/farms.html', current_user=current_user, userFarms=userFarms)
 
@@ -39,7 +39,7 @@ def allFarms():
 @login_required
 def farmDashboard(farm_id):
     
-    farm = db_session.query(Farm).join(FarmUser, FarmUser.farm_id==Farm.farm_id).filter(FarmUser.user_id==current_user.user_id).filter(Farm.farm_id==farm_id).one()
+    farm = db_session.query(Farm).filter(Farm.user_id==current_user.user_id).filter(Farm.farm_id==farm_id).one()
     
     # Get data for the widgets
     # TODO - Get data for the widgets on the dashboard
@@ -51,7 +51,7 @@ def farmDashboard(farm_id):
 @farms.route('/<int:farm_id>/pens', methods=['GET','POST'])
 @login_required
 def pensDashboard(farm_id):
-    farm = db_session.query(Farm).join(FarmUser, FarmUser.farm_id==Farm.farm_id).filter(FarmUser.user_id==current_user.user_id).filter(Farm.farm_id==farm_id).one()
+    farm = db_session.query(Farm).filter(Farm.user_id==current_user.user_id).filter(Farm.farm_id==farm_id).one()
 
     # Get the pens
     pens = db_session.query(Pen).join(Farm).filter(Farm.farm_id == farm.farm_id).order_by(Pen.name.asc())
@@ -66,7 +66,7 @@ def pensDashboard(farm_id):
 @farms.route('/<int:farm_id>/pens/create', methods=['GET','POST'])
 @login_required 
 def createPen(farm_id):
-    farm = db_session.query(Farm).join(FarmUser, FarmUser.farm_id==Farm.farm_id).filter(FarmUser.user_id==current_user.user_id).filter(Farm.farm_id==farm_id).one()
+    farm = db_session.query(Farm).filter(Farm.user_id==current_user.user_id).filter(Farm.farm_id==farm_id).one()
 
     form = PenForm()
     form.active.data = 1
@@ -87,13 +87,6 @@ def createPen(farm_id):
         return redirect(url_for('farms.pensDashboard', farm_id=farm_id))
 
     return render_template('pens/create-pen.html', current_user=current_user, farm=farm, form=form)
-
-
-
-
-
-
-
 
 
 

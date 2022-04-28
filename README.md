@@ -5,7 +5,7 @@ Intelliherd is a project that I have been working on for some time that allows u
 ## Roadmap 
 
 This project already has a functioning base. However, some items need to be cleaned up or redone. The basic roadmap for the project is as follows:
-- [ ] Database Changes
+- [x] Database Changes
 - [ ] REST API
 - [ ] Adjustments to Flask Web App
 - [ ] Flutter API Package

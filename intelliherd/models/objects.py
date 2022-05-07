@@ -256,6 +256,7 @@ class TransactionLog(Base):
     amount = Column(Numeric(12, 2), nullable=False, server_default=text("0.00"))
     created_at = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
     created_by = Column(ForeignKey('system_user.user_id'), nullable=False)
+    transaction_timestamp = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"))
 
     animal = relationship('Animal')
     system_user = relationship('SystemUser')

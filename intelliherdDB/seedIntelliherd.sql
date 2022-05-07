@@ -67,5 +67,14 @@ VALUES
 
 
 
-
+insert into transaction_type 
+(name, active, type)
+values 
+('Expenditure',1,'DEBIT'),
+('Product Sale',1,'CREDIT'),
+('Animal Sale',1,'CREDIT'),
+('Loss',1,'DEBIT'),
+('Expenditure - Feed',1,'DEBIT'),
+('Expenditure - Medical',1,'DEBIT'),
+('Expenditure - Habitat',1,'DEBIT');
 

@@ -33,7 +33,8 @@
         </div>
         <div class="form-group">
             {{ form.gender.label() }}{{ form.gender(_class="form-control") }}
-            {{ form.birthdate.label() }}{{ form.birthdate(_class="form-control") }}
+            {{ form.birthdate.label() }}{{ form.birthdate(_class="form-control") }} <b>Age: {{age}} days</b>
+
         </div>
         <div class="form-group">
             {{ form.number.label() }}{{ form.number(_class="form-control") }}

@@ -10,6 +10,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session, query, session
 from sqlalchemy.sql.functions import func
 from flask_table import Table, Col, OptCol, LinkCol
 import json
+from datetime import datetime
 
 from models.objects import SystemUser, Farm, Animal, AnimalStatus, AnimalType, Vaccine, VaccineDose, Pen, PenMember, Relationship, RelationshipType
 from models.Connection import db_session
@@ -114,6 +115,7 @@ def viewFarmAnimals(farm_id):
 @animals.route('/farms/<int:farm_id>/animals/<int:animal_id>/view', methods=['GET','POST'])
 @login_required
 def viewAnimal(farm_id, animal_id):
+
     if hasAnimalRights(current_user.user_id, animal_id):
         form = initializeAnimalForm()
         animal = db_session.query(Animal).filter(Animal.animal_id==animal_id).one()
@@ -137,7 +139,9 @@ def viewAnimal(farm_id, animal_id):
         form.gender.data = animal.gender
         form.birthdate.data = animal.birthdate
 
-        return render_template('animals/view-animal.html', current_user=current_user, user=user, form=form, animal=animal, farm=farm, mother=mother, father=father)
+        age = abs((datetime.now().date()-animal.birthdate).days)
+
+        return render_template('animals/view-animal.html', current_user=current_user, user=user, form=form, animal=animal, farm=farm, mother=mother, father=father, age=age)
     else: 
         flash("You don't have rights to this animal or it does not exist.", category='error')
         return redirect(url_for('animals.viewFarmAnimals', farm_id=farm_id))

@@ -322,6 +322,7 @@ CREATE TABLE transaction_log (
 	amount numeric(12, 2) NOT NULL DEFAULT 0.00,
 	created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	created_by int4 NOT NULL,
+	transaction_timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT transaction_log_pk PRIMARY KEY (transaction_log_id),
 	CONSTRAINT transaction_log_fk1 FOREIGN KEY (animal_id) REFERENCES animal(animal_id),
 	CONSTRAINT transaction_log_fk2 FOREIGN KEY (transaction_type_id) REFERENCES transaction_type(transaction_type_id),

@@ -23,6 +23,7 @@
 {% block content -%}
 {{ animalWidgets.animalViewMenu(selectedItemID="financials") }}
 <div class="container-fluid mt-2">
+    <a class="btn btn-lg btn-success" href="{{url_for('animals.addAnimalTransactionLog', farm_id=farm.farm_id, animal_id=animal.animal_id)}}">Add Log</a>
     {{table}}
 </div>
 

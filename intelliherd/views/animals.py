@@ -254,13 +254,41 @@ def viewAnimalFinancials(farm_id, animal_id):
         table = TransactionLogTable(transaction_logs)
         table.transaction_type_id.choices = getTransactionTypes()
 
+        session.close()
         return render_template('animals/animal-financials.html', current_user=current_user, farm=farm, animal=animal, table=table)
     else:
         flash("You don't have rights to this animal or it does not exist.", category='error')
+        session.close()
         return redirect(url_for('animals.viewFarmAnimals', farm_id=farm_id))
     
     session.commit()
     session.close()
+
+@animals.route('/farms/<int:farm_id>/animals/<int:animal_id>/view/financials/add-log', methods=['GET','POST'])
+@login_required
+def addAnimalTransactionLog(farm_id, animal_id):
+    if hasAnimalRights(current_user.user_id, animal_id):
+        animal = db_session.query(Animal).filter(Animal.animal_id==animal_id).one()
+        farm = db_session.query(Farm).join(Animal).filter(Animal.animal_id==animal_id).one()
+
+        form = initializeTransactionLogForm()
+        log = TransactionLog()
+        if form.validate_on_submit():
+            log.transaction_type_id = form.transaction_type_id.data 
+            log.title = form.title.data 
+            log.note = form.title.data 
+            log.amount = form.amount.data
+            log.transaction_timestamp = form.transaction_timestamp.data
+            log.animal_id = animal_id
+            log.created_by = current_user.user_id
+            db_session.add(log)
+            db_session.commit()
+
+        return render_template('animals/add-transaction-log.html', current_user=current_user, farm=farm, animal=animal, form=form)
+    else:
+        flash("You don't have rights to this animal or it does not exist.", category='error')
+        return redirect(url_for('animals.viewFarmAnimals', farm_id=farm_id))
+    
 
 
 # Utility Functions
@@ -275,8 +303,12 @@ def initializeAnimalForm():
 
     return form
 
-
-
+def initializeTransactionLogForm():
+    form = TransactionLogForm()
+    session = db_session()
+    transaction_types = session.query(TransactionType.transaction_type_id, TransactionType.name).all()
+    form.transaction_type_id.choices = transaction_types
+    return form
 
 
 def getAnimalTypes():
@@ -339,7 +371,7 @@ class TransactionLogForm(FlaskForm):
     title = StringField('Title:', validators=[DataRequired()])
     note = TextAreaField('Note:')
     amount = DecimalField('Amount:', validators=[DataRequired()])
-    transaction_timestamp = DateTimeLocalField('Transaction Date:')
+    transaction_timestamp = DateTimeLocalField('Transaction Date:', format='%Y-%m-%dT%H:%M', render_kw={"placeholder":"yyyy-mm-dd"})
 
 
 
@@ -383,6 +415,7 @@ class TransactionLogTable(Table):
     transaction_log_id = Col('Transaction Log ID')
     transaction_type_id = OptCol('Type')
     title = Col('Title')
+    amount = Col('Amount')
     note = Col('Note')
     transaction_timestamp = Col('Transaction Time')
-    recorded_at = Col('Logged At')
+    created_at = Col('Logged At')

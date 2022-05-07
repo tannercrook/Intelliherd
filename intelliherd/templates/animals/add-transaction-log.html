@@ -1,0 +1,57 @@
+{% extends "site/base.html" %}
+{% import "site/base.html" as layout with context %}
+{% block navbar %}
+{{super()}}
+{%- endblock navbar %}
+{% block sidebar %}
+{{super()}}
+{%- endblock sidebar %}
+{% block content_header -%}
+<h2>
+    {{farm.name}}
+    <small> Add Animal</small>
+</h2>
+<ol class="breadcrumb">
+    <li><a href={{url_for('account.accountDashboard')}}> Home</a></li>
+    <li><a href={{url_for('farms.allFarms')}}> Farms</a></li>
+    <li><a href={{url_for('farms.farmDashboard', farm_id=farm.farm_id)}}>{{farm.name}}</a></li>
+    <li><a href={{url_for('animals.animalsDashboard', farm_id=farm.farm_id)}}> Animals</a></li>
+    <li><a href="{{url_for('animals.viewAnimalFinancials', farm_id=farm.farm_id, animal_id=animal.animal_id)}}"> Financials</a></li>
+</ol>
+{%- endblock content_header %}
+{% block content -%}
+<div class="container">
+    <form class="form border rounded p-2" id="add-animal-form" method="POST">
+            {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.transaction_type_id.label() }}{{ form.transaction_type_id() }}
+        </div>
+        <div class="form-group">
+            {{ form.title.label() }}{{ form.title(_class="form-control") }}
+            {{ form.note.label() }}{{ form.note(_class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.amount.label() }}{{ form.amount(_class="form-control") }}
+            {{ form.transaction_timestamp.label() }}{{ form.transaction_timestamp(_class="form-control") }}
+        </div>
+        <button type="submit" class="btn btn-lg btn-primary">Save</button>
+        <div class="container">
+                {% for field in form.errors %}
+                {% for error in form.errors[field] %}
+                    <div class="alert alert-error">
+                        <strong>Error!</strong> {{error}}
+                    </div>
+                {% endfor %}
+                {% endfor %}
+        </div>
+    </form>
+
+</div>
+
+
+
+<div class="row">
+    
+
+</div>
+{%- endblock content %}

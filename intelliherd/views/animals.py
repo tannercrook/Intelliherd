@@ -3,8 +3,8 @@
 from flask import Flask, Blueprint, render_template, flash, redirect, request, abort, url_for, session, Response
 from flask_login import login_required, current_user
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, SubmitField, SelectField, PasswordField, TextAreaField
-from wtforms.fields.html5 import DateField
+from wtforms import StringField, IntegerField, SubmitField, SelectField, PasswordField, TextAreaField, DecimalField
+from wtforms.fields.html5 import DateField, DateTimeLocalField
 from wtforms.validators import DataRequired, Length, Email
 from sqlalchemy.orm import sessionmaker, scoped_session, query, session
 from sqlalchemy.sql.functions import func
@@ -12,7 +12,7 @@ from flask_table import Table, Col, OptCol, LinkCol
 import json
 from datetime import datetime
 
-from models.objects import SystemUser, Farm, Animal, AnimalStatus, AnimalType, Vaccine, VaccineDose, Pen, PenMember, Relationship, RelationshipType
+from models.objects import SystemUser, Farm, Animal, AnimalStatus, AnimalType, Vaccine, VaccineDose, Pen, PenMember, Relationship, RelationshipType, TransactionType, TransactionLog
 from models.Connection import db_session
 
 # set blueprint
@@ -240,6 +240,29 @@ def viewAnimalPenMemberships(farm_id, animal_id):
 
 
 
+# Financial Routes
+# ========================================================================================================
+@animals.route('/farms/<int:farm_id>/animals/<int:animal_id>/view/financials', methods=['GET','POST'])
+@login_required
+def viewAnimalFinancials(farm_id, animal_id):
+    session = db_session()
+    if hasAnimalRights(current_user.user_id, animal_id):
+        animal = session.query(Animal).filter(Animal.animal_id==animal_id).one()
+        farm = session.query(Farm).join(Animal).filter(Animal.animal_id==animal_id).one()
+        transaction_logs = session.query(TransactionLog).filter(TransactionLog.animal_id == animal_id).all()
+
+        table = TransactionLogTable(transaction_logs)
+        table.transaction_type_id.choices = getTransactionTypes()
+
+        return render_template('animals/animal-financials.html', current_user=current_user, farm=farm, animal=animal, table=table)
+    else:
+        flash("You don't have rights to this animal or it does not exist.", category='error')
+        return redirect(url_for('animals.viewFarmAnimals', farm_id=farm_id))
+    
+    session.commit()
+    session.close()
+
+
 # Utility Functions
 # ========================================================================================================
 def initializeAnimalForm():
@@ -288,6 +311,9 @@ def getPenChoices(farm_id, excludeInactive: bool):
         pens = db_session.query(Pen.pen_id, Pen.name).join(Farm).filter(Farm.farm_id==farm_id).all()
         return dict(pens)
 
+def getTransactionTypes():
+    transaction_types = db_session.query(TransactionType.transaction_type_id, TransactionType.name).all()
+    return dict(transaction_types)
 
 
 # OBJECTS
@@ -307,7 +333,13 @@ class AnimalForm(FlaskForm):
     #scan_number = Column(Integer)
 
 
-
+# Form for recording transactions
+class TransactionLogForm(FlaskForm):
+    transaction_type_id = SelectField('Transaction Type:', coerce=int, validators=[DataRequired()])
+    title = StringField('Title:', validators=[DataRequired()])
+    note = TextAreaField('Note:')
+    amount = DecimalField('Amount:', validators=[DataRequired()])
+    transaction_timestamp = DateTimeLocalField('Transaction Date:')
 
 
 
@@ -343,3 +375,14 @@ class PenMemberTable(Table):
     pen_id = OptCol('Pen')
     start_date = Col('Start Date')
     end_date = Col('End Date')
+
+class TransactionLogTable(Table):
+    classes = ['table', 'table-bordered', 'table-striped', 'bg-white']
+    table_id = 'transactionLogTable'
+    no_items = 'Animal does not have any transaction log records.'
+    transaction_log_id = Col('Transaction Log ID')
+    transaction_type_id = OptCol('Type')
+    title = Col('Title')
+    note = Col('Note')
+    transaction_timestamp = Col('Transaction Time')
+    recorded_at = Col('Logged At')

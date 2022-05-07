@@ -6,6 +6,7 @@
         <li id="groups" class="nav-item"><a class="nav-link" href="#">Groups</a></li>
         <li id="vaccinations" class="nav-item"><a class="nav-link" href="{{url_for('animals.viewAnimalVaccines', farm_id=farm.farm_id, animal_id=animal.animal_id)}}">Vaccinations</a></li>
         <li id="health" class="nav-item"><a class="nav-link" href="#">Health</a></li>
+        <li id="financials" class="nav-item"><a class="nav-link" href="{{url_for('animals.viewAnimalFinancials', farm_id=farm.farm_id, animal_id=animal.animal_id)}}">Financials</a></li>
     </ul>
 </nav>
 <script>

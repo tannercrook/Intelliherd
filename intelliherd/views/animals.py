@@ -14,6 +14,7 @@ from datetime import datetime
 
 from models.objects import SystemUser, Farm, Animal, AnimalStatus, AnimalType, Vaccine, VaccineDose, Pen, PenMember, Relationship, RelationshipType, TransactionType, TransactionLog
 from models.Connection import db_session
+from views.pens import initializePenMemberForm, PenMemberForm, getCurrentPenMembership
 
 # set blueprint
 animals = Blueprint('animals', __name__)
@@ -238,6 +239,36 @@ def viewAnimalPenMemberships(farm_id, animal_id):
         return redirect(url_for('animals.viewFarmAnimals', farm_id=farm_id))
 
 
+@animals.route('/farms/<int:farm_id>/animals/<int:animal_id>/view/add-pen-membership', methods=['GET','POST'])
+@login_required
+def addPenMembership(farm_id, animal_id):
+    farm = db_session.query(Farm).join(Pen).filter(Farm.farm_id == farm_id).one()
+    animal = db_session.query(Animal).filter(Animal.animal_id == animal_id).one()
+    if hasAnimalRights(current_user.user_id, animal_id):
+        form = initializePenMemberForm(farm.farm_id)
+        if form.validate_on_submit():
+            if form.end_date.data == None:
+                # Check if animal already has a Pen membership
+                currentPenMemberID = getCurrentPenMembership(animal.animal_id)
+                if(currentPenMemberID != None):
+                    flash('Not Saved: Conflicting active pen membership.', category='error')
+                    return redirect(url_for('animals.viewAnimalPenMemberships', farm_id=farm.farm_id, animal_id=animal.animal_id))
+            penMember = PenMember()
+            penMember.animal_id = animal.animal_id
+            penMember.pen_id = form.pen_id.data
+            penMember.start_date = form.start_date.data
+            penMember.start_note = form.start_note.data 
+            penMember.end_date = form.end_date.data
+            penMember.end_note = form.end_note.data 
+            db_session.add(penMember)
+            db_session.commit()
+            flash('Saved Successfully', category='info')
+            return redirect(url_for('animals.viewAnimalPenMemberships', farm_id=farm.farm_id, animal_id=animal.animal_id))
+
+        return render_template('animals/animal-add-penmembership.html', current_user=current_user, farm=farm, animal=animal, form=form)
+    else: 
+        flash("You don't have rights to this animal or it does not exist.", category='error')
+        return redirect(url_for('animals.viewFarmAnimals', farm_id=pen.farm_id))
 
 
 # Financial Routes

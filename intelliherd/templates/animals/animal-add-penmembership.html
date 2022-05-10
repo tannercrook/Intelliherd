@@ -1,0 +1,55 @@
+{% extends "site/base.html" %}
+{% import "site/base.html" as layout with context %}
+{% import "site/widgets/animalWidgets.html" as animalWidgets with context %}
+{% block navbar %}
+{{super()}}
+{%- endblock navbar %}
+{% block sidebar %}
+{{super()}}
+{%- endblock sidebar %}
+{% block content_header -%}
+<h2>
+    {{farm.name}} | 
+    <small> {{animal.number}} &nbsp; {{animal.name}}</small>
+</h2>
+<ol class="breadcrumb">
+    <li><a href={{url_for('account.accountDashboard')}}> Home</a></li>
+    <li><a href={{url_for('farms.allFarms')}}> Farms</a></li>
+    <li><a href={{url_for('farms.farmDashboard', farm_id=farm.farm_id)}}>{{farm.name}}</a></li>
+    <li><a href={{url_for('animals.animalsDashboard', farm_id=farm.farm_id)}}>Animals</a></li>
+    <li><a href="#"> View Animal</a></li>
+</ol>
+{%- endblock content_header %}
+{% block content -%}
+{{ animalWidgets.animalViewMenu(selectedItemID="pens") }}
+<div class="container-fluid mt-2">
+    <form class="form border" id="edit-penmembership-form" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.pen_id.label() }}{{ form.pen_id() }}
+        </div>
+        <div class="form-group">
+            {{ form.start_date.label() }}{{ form.start_date(_class="form-control") }}
+            {{ form.start_note.label() }}{{ form.start_note(_class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.end_date.label() }}{{ form.end_date(_class="form-control") }}
+            {{ form.end_note.label() }}{{ form.end_note(_class="form-control") }}
+        </div>
+        <button type="submit" class="btn btn-lg btn-primary">Save</button>
+        <a class="btn btn-danger" href="#" data-toggle="modal" data-target="#delete">Delete</a>
+        <div class="container">
+            {% for field in form.errors %}
+            {% for error in form.errors[field] %}
+            <div class="alert alert-error">
+                <strong>Error!</strong> {{error}} : {{field}}
+            </div>
+            {% endfor %}
+            {% endfor %}
+        </div>
+    </form>
+</div>
+
+
+</div>
+{%- endblock content %}

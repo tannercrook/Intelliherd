@@ -152,6 +152,9 @@ def editPenMembership(pen_id, pen_member_id):
         return redirect(url_for('animals.viewFarmAnimals', farm_id=pen.farm_id))
 
 
+
+
+
 @pens.route('/<int:pen_id>/animals/<int:pen_member_id>/delete', methods=['GET','POST'])
 @login_required
 def deletePenMember(pen_id, pen_member_id):

@@ -53,9 +53,12 @@ def animalsDashboard(farm_id):
             value = status[1]
             statusValues.append(value)
 
+    animals = db_session.query(Animal).join(Farm).filter(Farm.farm_id == farm_id).all()
+    
+    table = AnimalTable(animals)
+    table.animal_type_id.choices = getAnimalTypes()
 
-
-    return render_template('animals/animals-dashboard.html', current_user=current_user, farm=farm, animalCount = animalCount, femaleCount=femaleCount, maleCount=maleCount, statusLabels=statusLabels, statusValues=statusValues)
+    return render_template('animals/animals-dashboard.html', current_user=current_user, farm=farm, animalCount = animalCount, femaleCount=femaleCount, maleCount=maleCount, statusLabels=statusLabels, statusValues=statusValues, table=table)
 
 
 
@@ -283,6 +286,7 @@ def addAnimalTransactionLog(farm_id, animal_id):
             log.created_by = current_user.user_id
             db_session.add(log)
             db_session.commit()
+            return redirect(url_for('animals.viewAnimalFinancials', current_user=current_user, farm_id=farm.farm_id, animal_id=animal.animal_id))
 
         return render_template('animals/add-transaction-log.html', current_user=current_user, farm=farm, animal=animal, form=form)
     else:

@@ -76,45 +76,41 @@
                 <div class="">
                   <ul class="nav flex-column">
                     <li class="nav-item">
-                      <a class="nav-link" href="#">
+                      <a class="nav-link" href="{{url_for('farms.allFarms')}}">
                         <span data-feather="home"></span>
-                        Dashboard <span class="sr-only">(current)</span>
+                        Farms
+                      </a>
+                    </li>
+                    {% if farm %}
+                    <li class="nav-item">
+                      <a class="nav-link" href="{{url_for('farms.farmDashboard', farm_id=farm.farm_id)}}">
+                        <span data-feather="home"></span>
+                        Dashboard
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="#">
+                      <a class="nav-link" href="{{url_for('animals.animalsDashboard', farm_id=farm.farm_id)}}">
                         <span data-feather="file"></span>
-                        Orders
+                        Animals
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="#">
+                      <a class="nav-link" href="{{url_for('farms.pensDashboard', farm_id=farm.farm_id)}}">
                         <span data-feather="shopping-cart"></span>
-                        Products
+                        Pens
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="#">
+                      <a class="nav-link" href="{{url_for('animals.vaccineWizard', farm_id=farm.farm_id)}}">
                         <span data-feather="users"></span>
-                        Customers
+                        Vaccine Wizard
                       </a>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">
-                        <span data-feather="bar-chart-2"></span>
-                        Reports
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">
-                        <span data-feather="layers"></span>
-                        Integrations
-                      </a>
-                    </li>
+                    {% endif %}
                   </ul>
           
                   <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span>Saved reports</span>
+                    <span>Reports (WIP)</span>
                     <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
                       <span data-feather="plus-circle"></span>
                     </a>
@@ -123,25 +119,25 @@
                     <li class="nav-item">
                       <a class="nav-link" href="#">
                         <span data-feather="file-text"></span>
-                        Current month
+                        Animal Contribution Margin
                       </a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="#">
                         <span data-feather="file-text"></span>
-                        Last quarter
+                        Spend by Animal
                       </a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="#">
                         <span data-feather="file-text"></span>
-                        Social engagement
+                        Total Spend
                       </a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" href="#">
                         <span data-feather="file-text"></span>
-                        Year-end sale
+                        Total Profits - Annually
                       </a>
                     </li>
                   </ul>

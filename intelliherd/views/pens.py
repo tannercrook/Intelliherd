@@ -152,6 +152,9 @@ def editPenMembership(pen_id, pen_member_id):
         return redirect(url_for('animals.viewFarmAnimals', farm_id=pen.farm_id))
 
 
+
+
+
 @pens.route('/<int:pen_id>/animals/<int:pen_member_id>/delete', methods=['GET','POST'])
 @login_required
 def deletePenMember(pen_id, pen_member_id):
@@ -170,7 +173,7 @@ def deletePenMember(pen_id, pen_member_id):
 
 def hasFarmRights(user_id, farm_id):
     # Check to see if 
-    farmCount = db_session.query(SystemUser).join(FarmUser, SystemUser.user_id==FarmUser.user_id).filter(SystemUser.user_id == user_id).count()
+    farmCount = db_session.query(SystemUser).join(Farm, SystemUser.user_id==Farm.user_id).filter(SystemUser.user_id == user_id).count()
     if farmCount >= 1:
         return True
     return False

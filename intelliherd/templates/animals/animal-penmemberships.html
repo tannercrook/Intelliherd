@@ -9,8 +9,8 @@
 {%- endblock sidebar %}
 {% block content_header -%}
 <h2>
-    {{farm.name}}
-    <small> View Animal</small>
+    {{farm.name}} | 
+    <small> {{animal.number}} &nbsp; {{animal.name}}</small>
 </h2>
 <ol class="breadcrumb">
     <li><a href={{url_for('account.accountDashboard')}}> Home</a></li>

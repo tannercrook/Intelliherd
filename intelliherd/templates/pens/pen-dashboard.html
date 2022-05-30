@@ -25,9 +25,10 @@
         <a class="btn btn-primary mr-3" href={{ url_for('farms.createPen', farm_id=farm.farm_id) }}>Add Pen</a>
     </div>
     <hr>
-
-    <!-- Pen Table -->
-    {{ table }}
+    <div style="overflow-x: auto">
+        <!-- Pen Table -->
+        {{ table }}
+    </div>
 </div>
 <script>
     $(document).ready(function () {

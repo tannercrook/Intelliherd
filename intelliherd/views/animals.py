@@ -283,13 +283,53 @@ def viewAnimalFinancials(farm_id, animal_id):
     if hasAnimalRights(current_user.user_id, animal_id):
         animal = session.query(Animal).filter(Animal.animal_id==animal_id).one()
         farm = session.query(Farm).join(Animal).filter(Animal.animal_id==animal_id).one()
-        transaction_logs = session.query(TransactionLog).filter(TransactionLog.animal_id == animal_id).all()
+        transaction_logs = session.query(TransactionLog).filter(TransactionLog.animal_id == animal_id).order_by(TransactionLog.transaction_timestamp.desc()).all()
 
         table = TransactionLogTable(transaction_logs)
         table.transaction_type_id.choices = getTransactionTypes()
 
+        sql = """select 
+            tl.*,
+            tt.type as transaction_type,
+            tt.name as transaction_type_name,
+            a.name,
+            a.number as animal_number,
+            att."name" as animal_name,
+            att.group_name as animal_group_name
+            from transaction_log tl 
+            left join transaction_type  tt 
+            on tl.transaction_type_id = tt.transaction_type_id
+            left join animal a 
+            on tl.animal_id = a.animal_id
+            left join animal_type att
+            on a.animal_type_id  = att.animal_type_id 
+            where tl.animal_id = {}
+        """.format(animal_id)
+
+        reporting_logs = session.execute(sql)
+
         session.close()
-        return render_template('animals/animal-financials.html', current_user=current_user, farm=farm, animal=animal, table=table)
+        # Aggregations
+        debits = []
+        credits = []
+        total_debits = 0
+        total_credits = 0
+        for log in reporting_logs:
+            if log['transaction_type'] == 'DEBIT':
+                debits.append(log)
+                total_debits = total_debits + log['amount']
+            if log['transaction_type'] == 'CREDIT':
+                credits.append(log)
+                total_credits = total_credits + log['amount']
+
+        aggregate_info = {
+            "total_debits":total_debits,
+            "total_credits":total_credits,
+            "total_transactions":len(transaction_logs),
+            "total":(total_credits-total_debits)
+        }
+
+        return render_template('animals/animal-financials.html', current_user=current_user, farm=farm, animal=animal, table=table, aggregate_info = aggregate_info)
     else:
         flash("You don't have rights to this animal or it does not exist.", category='error')
         session.close()

@@ -78,3 +78,12 @@ values
 ('Expenditure - Medical',1,'DEBIT'),
 ('Expenditure - Habitat',1,'DEBIT');
 
+
+insert into vaccine 
+(name, code, animal_type_id, required, active)
+values 
+('Bovine Rhinotracheitis','IBR', 1, 1, 1),
+('Bovine Virus Diarrhea','BVD', 1, 1, 1),
+('Parainfluenza3','PI3', 1, 1, 1),
+('Respitory Syncytial Virus','BRSV', 1, 1, 1);
+

@@ -16,9 +16,7 @@ This project already has a functioning base. However, some items need to be clea
 - [ ] Upload animal photo
 - [x] Manage pens and animal pen membership
 - [x] Record vaccinations for animals
-- [ ] Manage vaccines (add/edit/delete)
-- [x] Record finances transactions
-- [ ] Manage finance transactions (edit/delete)
+- [x] Manage financial transactions
 - [ ] Health log
 - [ ] Sign-up
 - [ ] User Profile Management

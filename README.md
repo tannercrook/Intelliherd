@@ -11,7 +11,7 @@ This project already has a functioning base. However, some items need to be clea
 - [ ] Flutter API Package
 - [ ] Flutter UI/Backend
 
-## Feature Progress   
+## Flask Web Feature Progress   
 - [x] Manage animal demographics
 - [ ] Upload animal photo
 - [x] Manage pens and animal pen membership

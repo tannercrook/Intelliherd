@@ -330,3 +330,15 @@ CREATE TABLE transaction_log (
 );
 
 
+
+CREATE TABLE auth_token (
+	auth_token_id int4 generated always as identity,
+	user_id int4 not null, 
+	bearer_token varchar(250) not null,
+	created_on timestamp not null default current_timestamp,
+	expires_on timestamp,
+	CONSTRAINT auth_token_pk PRIMARY KEY (auth_token_id),
+	CONSTRAINT auth_token_fk1 FOREIGN KEY (user_id) REFERENCES system_user(user_id)
+);
+
+CREATE UNIQUE INDEX auth_token_uq1 ON auth_token(bearer_token);

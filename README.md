@@ -2,7 +2,7 @@
 
 Intelliherd is a project that I have been working on for some time that allows users to track their animals and keep data such as expenses, health, and other data about animals.
 
-## Roadmap 
+## Macro Roadmap 
 
 This project already has a functioning base. However, some items need to be cleaned up or redone. The basic roadmap for the project is as follows:
 - [x] Database Changes
@@ -10,6 +10,16 @@ This project already has a functioning base. However, some items need to be clea
 - [ ] REST API
 - [ ] Flutter API Package
 - [ ] Flutter UI/Backend
+
+## Flask Web Feature Progress   
+- [x] Manage animal demographics
+- [ ] Upload animal photo
+- [x] Manage pens and animal pen membership
+- [x] Record vaccinations for animals
+- [x] Manage financial transactions
+- [ ] Health log
+- [ ] Sign-up
+- [ ] User Profile Management
 
 ## System76 Unleash Your Potential 
 

@@ -21,8 +21,9 @@
 {%- endblock content_header %}
 {% block content -%}
 
-
+<div class="container-fluid" style="overflow-x: auto">
 {{ table }}
+</div>
 <script>
     $(document).ready( function () {
     $('#animalTable').DataTable();

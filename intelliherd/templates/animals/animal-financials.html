@@ -9,7 +9,7 @@
 {%- endblock sidebar %}
 {% block content_header -%}
 <h2>
-    {{farm.name}} | 
+    {{farm.name}} |
     <small> {{animal.number}} &nbsp; {{animal.name}}</small>
 </h2>
 <ol class="breadcrumb">
@@ -22,10 +22,33 @@
 {%- endblock content_header %}
 {% block content -%}
 {{ animalWidgets.animalViewMenu(selectedItemID="financials") }}
-<div class="container-fluid mt-2">
-    <a class="btn btn-lg btn-success" href="{{url_for('animals.addAnimalTransactionLog', farm_id=farm.farm_id, animal_id=animal.animal_id)}}">Add Log</a>
+<div class="row my-2">
+    <div class="col-md-6">
+        <table class="table table-bordered">
+            <tr>
+                <td><b>Credits</b></td>
+                <td>{{ "${:,.2f}".format(aggregate_info['total_credits']) }}</td>
+            </tr>
+            <tr>
+                <td><b>Debits</b></td>
+                <td>{{ "${:,.2f}".format(aggregate_info['total_debits']) }}</td>
+            </tr>
+            <tr class="bg-light">
+                <td><b>Total Profit</b></td>
+                <td><b>{{ "${:,.2f}".format(aggregate_info['total']) }}</b></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<hr>
+<a class="btn btn-lg btn-success"
+        href="{{url_for('animals.addAnimalTransactionLog', farm_id=farm.farm_id, animal_id=animal.animal_id)}}">Add
+        Log</a>
+<div class="container-fluid mt-2" style="overflow-x: auto;">
     {{table}}
 </div>
+
+
 
 </div>
 {%- endblock content %}

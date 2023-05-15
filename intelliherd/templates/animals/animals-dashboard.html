@@ -53,7 +53,10 @@
 </div>
 <script>
     $(document).ready( function () {
-    $('#animalTable').DataTable();
+    $('#animalTable').DataTable({
+        order: [[4, 'desc']],
+        "pageLength": 50
+    });
     } );
     </script>
 <script>

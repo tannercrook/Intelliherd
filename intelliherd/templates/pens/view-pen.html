@@ -24,6 +24,7 @@
     <!-- Toolbar -->
     <div class="row">
         <a class="btn btn-lg btn-info" href={{url_for('pens.penWizard', pen_id=pen.pen_id)}}><i class="fa fa-magic"></i> Wizard</a>
+        <a class="btn btn-lg btn-info" href={{url_for('pens.penSharedExpense', pen_id=pen.pen_id)}}><i class="fa fa-money-bill"></i> Shared Expense</a>
     </div>
     <hr>
 
@@ -32,7 +33,10 @@
 </div>
 <script>
     $(document).ready(function () {
-        $('#animalTable').DataTable();
+        $('#animalTable').DataTable({
+            order: [[4, 'desc']],
+            "pageLength": 50
+        });
     });
 </script>
 {%- endblock content %}

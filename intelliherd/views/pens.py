@@ -1,8 +1,8 @@
 from flask import Flask, Blueprint, render_template, flash, redirect, request, abort, url_for, session, Response
 from flask_login import login_required, current_user
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, SubmitField, SelectField, PasswordField, TextAreaField
-from wtforms.fields.html5 import DateField
+from wtforms import StringField, IntegerField, SubmitField, SelectField, PasswordField, TextAreaField, DecimalField
+from wtforms.fields.html5 import DateField, DateTimeLocalField
 from wtforms.validators import DataRequired, Length, Email, Optional
 from sqlalchemy.orm import sessionmaker, scoped_session, query
 from flask_table import Table, Col, OptCol, LinkCol
@@ -10,7 +10,7 @@ from flask_table import Table, Col, OptCol, LinkCol
 import datetime
 import json
 
-from models.objects import Farm, Animal, SystemUser, Pen, PenMember, AnimalType, AnimalStatus
+from models.objects import Farm, Animal, SystemUser, Pen, PenMember, AnimalType, AnimalStatus, TransactionLog, TransactionType
 from models.Connection import db_session
 
 # set blueprint
@@ -170,6 +170,37 @@ def deletePenMember(pen_id, pen_member_id):
         return redirect(url_for('animals.viewAnimalPenMemberships', farm_id=pen.farm_id, animal_id=penMember.animal_id))
 
 
+@pens.route('/<int:pen_id>/finance/shared-expense', methods=['GET','POST'])
+@login_required
+def penSharedExpense(pen_id):
+    pen = db_session.query(Pen).filter(Pen.pen_id == pen_id).one()
+    farm = db_session.query(Farm).join(Pen).filter(Pen.pen_id==pen_id).one()
+    if(hasFarmRights(current_user.user_id, pen.farm_id)):
+        animals = db_session.query(Animal).join(PenMember).filter(PenMember.pen_id==pen_id).all()
+        table = AnimalTable(animals)
+        table.animal_type_id.choices = getAnimalTypes()
+        form = initializeTransactionLogForm()
+        if form.validate_on_submit():
+            totalCost = form.amount.data
+            perAnimalCost = round(totalCost / len(animals),2)
+            for animal in animals:
+                log = TransactionLog()
+                log.transaction_type_id = form.transaction_type_id.data 
+                log.title = form.title.data 
+                log.note = 'Shared Expense Tool: '+form.title.data 
+                log.amount = perAnimalCost
+                log.transaction_timestamp = form.transaction_timestamp.data
+                log.animal_id = animal.animal_id
+                log.created_by = current_user.user_id
+                db_session.add(log)
+            db_session.commit()
+            return render_template('pens/view-pen.html', current_user=current_user, farm=farm, pen=pen, table=table)
+    return render_template('pens/shared-expense.html',form=form, pen=pen, animals=animals, farm=farm, animals_count=len(animals))
+
+
+
+
+
 
 def hasFarmRights(user_id, farm_id):
     # Check to see if 
@@ -210,6 +241,13 @@ def fillPenMemberForm(farm_id, form, penMember: PenMember):
     form.end_note.data = penMember.end_note
     return form
 
+def initializeTransactionLogForm():
+    form = TransactionLogForm()
+    session = db_session()
+    transaction_types = session.query(TransactionType.transaction_type_id, TransactionType.name).all()
+    form.transaction_type_id.choices = transaction_types
+    return form
+
 
 def getPenChoices(farm_id, excludeInactive: bool):
     # Get pens for a farm
@@ -219,6 +257,7 @@ def getPenChoices(farm_id, excludeInactive: bool):
     else:
         pens = db_session.query(Pen.pen_id, Pen.name).join(Farm).filter(Farm.farm_id==farm_id).all()
         return pens
+
 
 
 
@@ -244,3 +283,9 @@ class PenMemberForm(FlaskForm):
     end_date = DateField('End Date: ', validators=[Optional()] ,format='%Y-%m-%d')
     end_note = TextAreaField('End Note: ')
 
+class TransactionLogForm(FlaskForm):
+    transaction_type_id = SelectField('Transaction Type:', coerce=int, validators=[DataRequired()])
+    title = StringField('Title:', validators=[DataRequired()])
+    note = TextAreaField('Note:')
+    amount = DecimalField('Amount:', validators=[DataRequired()])
+    transaction_timestamp = DateTimeLocalField('Transaction Date:', format='%Y-%m-%dT%H:%M', render_kw={"placeholder":"yyyy-mm-dd"})

@@ -6,7 +6,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField, SelectField, PasswordField, BooleanField
 from wtforms.validators import DataRequired, Length, Email
 from sqlalchemy.orm import sessionmaker, scoped_session, query
-from flask_table import Table, Col, OptCol, LinkCol
+from flask_table2 import Table, Col, OptCol, LinkCol
 from models.objects import SystemUser, Farm, Pen, PenMember
 from models.Connection import db_session
 

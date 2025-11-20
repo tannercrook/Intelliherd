@@ -26,7 +26,7 @@ from models.Connection import db_session
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '\xfc\x123\xda\x06\xc8o\xf3\x95\x01\xafaU\\\xc1Z\xa4\xa9C\xddo\x020]'
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://tannercrook:Kinger413!@meridia.crooktec.com/intelliherd'
 db = SQLAlchemy(app)
 
 

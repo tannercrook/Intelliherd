@@ -27,6 +27,7 @@ def login():
                 if next is None or not next.startswith('/'):
                     next = url_for('account.accountDashboard')
                 return redirect(next)
+        print('Password or username not correct.')
         flash('Invalid username or password.')
     
 

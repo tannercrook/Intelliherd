@@ -2,10 +2,10 @@ from flask import Flask, Blueprint, render_template, flash, redirect, request, a
 from flask_login import login_required, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, SubmitField, SelectField, PasswordField, TextAreaField, DecimalField
-from wtforms.fields.html5 import DateField, DateTimeLocalField
+from wtforms.fields import DateField, DateTimeLocalField
 from wtforms.validators import DataRequired, Length, Email, Optional
 from sqlalchemy.orm import sessionmaker, scoped_session, query
-from flask_table import Table, Col, OptCol, LinkCol
+from flask_table2 import Table, Col, OptCol, LinkCol
 
 import datetime
 import json
